@@ -1,0 +1,68 @@
+.login-register-page {
+    ion-content {
+        --padding-top: 60px;
+        --padding-bottom: 60px;
+    }
+    ion-row {
+        width: -webkit-fill-available;
+        &.custom-ion-row {
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        &.full-height {
+            height: -webkit-fill-available;
+        }
+        &.gap30 {
+            gap: 30px;
+        }
+        &.gap16 {
+            gap: 16px;
+        }
+    }
+    ion-button {
+        --border-radius: 50px;
+        align-self: stretch;
+    }
+    .forgot-password {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 160%;
+    }
+    .info {
+        font-size: 16px;
+        line-height: 160%;
+        .info-button {
+            font-weight: 700;
+            margin-left: 5px;
+        }
+    }
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 130%;
+    }
+    .input-item {
+        width: -webkit-fill-available;
+        position: relative;
+        display: flex;
+        ion-input.custom-input-field {
+            --background: #95b0b41a;
+            --color: var(--ion-color-medium);
+            --border-radius: 10px;
+
+            --padding-bottom: 12px;
+            --padding-end: 14px;
+            --padding-start: 14px;
+            --padding-top: 12px;
+        }
+        .input-icon {
+            cursor: pointer;
+            width: 20px;
+            height: -webkit-fill-available;
+            position: absolute;
+            right: 14px;
+            z-index: 100;
+        }
+    }
+}
