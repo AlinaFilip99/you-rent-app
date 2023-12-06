@@ -14,3 +14,23 @@
 ion-checkbox {
     --border-radius: 5px;
 }
+
+ion-tab-bar {
+    height: 77px;
+    --background: white;
+    --border: unset;
+    --color: var(--ion-color-medium);
+    --color-selected: var(--ion-color-light);
+    font-weight: 400;
+    ion-tab-button {
+        ion-label {
+            margin-top: 6px;
+            font-weight: 400;
+        }
+        &.tab-selected {
+            svg path {
+                stroke: var(--ion-color-light);
+            }
+        }
+    }
+}

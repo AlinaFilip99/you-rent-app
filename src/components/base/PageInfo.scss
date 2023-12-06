@@ -1,0 +1,17 @@
+.page-info {
+    color: var(--ion-color-light);
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    svg,
+    ion-icon {
+        height: 45px;
+        width: 45px;
+        margin-bottom: 10px;
+    }
+    .basic-info {
+        font-size: 20px;
+    }
+}

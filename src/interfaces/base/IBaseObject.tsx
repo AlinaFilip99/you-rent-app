@@ -1,0 +1,3 @@
+interface IBaseObject {
+    id: string;
+}
