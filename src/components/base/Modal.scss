@@ -1,0 +1,18 @@
+.generic-modal {
+    ion-toolbar.modal-toolbar {
+        padding: 6px 0;
+        ion-button {
+            font-weight: 500;
+            &.start-button {
+                --color: #ce0024;
+            }
+        }
+    }
+    ion-footer.modal-footer {
+        ion-toolbar {
+            padding-top: 0 !important;
+
+            --background: var(--ion-color-background-page);
+        }
+    }
+}

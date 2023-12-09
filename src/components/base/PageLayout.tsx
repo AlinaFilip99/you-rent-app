@@ -34,10 +34,10 @@ const PageLayout: React.FC<ILoginRegisterPage> = ({
     );
 
     return (
-        <IonPage className={pageClassName} style={{ height: pageHeight }}>
+        <IonPage className={pageClassName} style={{ height: pageHeight }} id="main-content">
             {headerContent && <IonHeader collapse="fade">{headerContent}</IonHeader>}
             <IonLoading isOpen={isLoading} message="Loading" />
-            <IonContent className="ion-padding" ref={contentRef}>
+            <IonContent className="ion-padding custom-padding" ref={contentRef}>
                 {onRefresh && (
                     <IonRefresher
                         slot="fixed"

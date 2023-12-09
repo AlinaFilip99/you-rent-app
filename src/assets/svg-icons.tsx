@@ -96,3 +96,83 @@ export const AppLogo = (props: any) => {
         </svg>
     );
 };
+
+export const BathroomIcon = (props: any) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" {...props}>
+            <path
+                d="M10.9999 9.43057C11.1198 9.43057 11.2398 9.38482 11.3313 9.29326L11.5813 9.04326C11.7644 8.8602 11.7644 8.56342 11.5813 8.38035C11.3983 8.19729 11.1014 8.19729 10.9184 8.38035L10.6684 8.63035C10.3722 8.92654 10.586 9.43057 10.9999 9.43057Z"
+                fill={props?.color || '#95B0B4'}
+            />
+            <path
+                d="M12.9999 9.68057C13.1198 9.68057 13.2398 9.63482 13.3313 9.54326L13.5813 9.29326C13.7644 9.1102 13.7644 8.81342 13.5813 8.63035C13.3983 8.44729 13.1015 8.44729 12.9184 8.63035L12.6684 8.88035C12.3722 9.17654 12.586 9.68057 12.9999 9.68057Z"
+                fill={props?.color || '#95B0B4'}
+            />
+            <path
+                d="M10.9999 11.4306C11.1198 11.4306 11.2398 11.3848 11.3313 11.2933L11.5813 11.0433C11.7644 10.8602 11.7644 10.5634 11.5813 10.3804C11.3983 10.1973 11.1014 10.1973 10.9184 10.3804L10.6684 10.6304C10.3722 10.9265 10.586 11.4306 10.9999 11.4306Z"
+                fill={props?.color || '#95B0B4'}
+            />
+            <path
+                d="M4.96875 13.4306H20.0312C20.2901 13.4306 20.5 13.2207 20.5 12.9619C20.5 12.703 20.2901 12.4931 20.0312 12.4931H19.4687V6.63205C19.4687 5.45455 18.5161 4.50005 17.337 4.50005C16.8446 4.50005 16.3642 4.67221 15.9844 4.98377L15.69 5.2253C15.0313 4.83758 14.1675 4.92615 13.6025 5.49118L12.8954 6.19827C12.7123 6.38133 12.7123 6.67812 12.8954 6.86118L14.6632 8.62896C14.8462 8.81202 15.143 8.81205 15.3261 8.62896C16.0767 7.87833 16.0301 7.92187 16.0332 7.92187C16.578 7.37705 16.6799 6.55443 16.3388 5.90571L16.5791 5.70858C16.7907 5.53496 17.0581 5.43871 17.3318 5.43758C17.9723 5.43183 18.5312 5.95255 18.5312 6.63205V12.4931C18.051 12.4931 5.44447 12.4931 4.96875 12.4931C4.70987 12.4931 4.5 12.703 4.5 12.9619C4.5 13.2208 4.70987 13.4306 4.96875 13.4306Z"
+                fill={props?.color || '#95B0B4'}
+            />
+            <path
+                d="M5.7793 14.3681L5.97902 15.4665C6.27623 17.1013 7.48927 18.3709 9.0313 18.7858V19.4619C9.0313 19.7208 9.24117 19.9307 9.50005 19.9307C9.75892 19.9307 9.9688 19.7208 9.9688 19.4619V18.9274C10.1151 18.9329 14.9018 18.9323 15.0313 18.9274V19.4619C15.0313 19.7208 15.2412 19.9307 15.5 19.9307C15.7589 19.9307 15.9688 19.7208 15.9688 19.4619V18.7858C17.5108 18.3709 18.7239 17.1013 19.0211 15.4666L19.2208 14.3682H5.7793V14.3681Z"
+                fill={props?.color || '#95B0B4'}
+            />
+        </svg>
+    );
+};
+
+export const SurfaceIcon = (props: any) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
+            <rect x="0.452942" y="0.9408" width="23.4749" height="22.1184" fill={props?.color || '#D8D8D8'} fillOpacity="0.01" />
+            <path
+                d="M18.9842 19.085H19.7096V18.4015"
+                stroke={props?.color || '#95B0B4'}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path d="M11.0042 19.0849H10.2788" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M8.82798 19.0849H8.10254" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M13.1807 19.0849H12.4553" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M15.3569 19.0849H14.6315" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M17.5331 19.0849H16.8077" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.7095 14.3003V14.9838" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.7095 12.2497V12.9332" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.7095 10.1991V10.8826" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.7095 8.14865V8.83217" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.7095 16.3509V17.0344" stroke={props?.color || '#95B0B4'} strokeLinecap="round" strokeLinejoin="round" />
+            <path
+                d="M6.65161 19.0849V6.78151H19.7095"
+                stroke={props?.color || '#95B0B4'}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M16.0825 4.04749L19.7097 6.78157L16.0825 9.51565"
+                stroke={props?.color || '#95B0B4'}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M3.74988 15.6673L6.65164 19.0849L9.5534 15.6673"
+                stroke={props?.color || '#95B0B4'}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};
+
+export const BedroomIcon = (props: any) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none" {...props}>
+            <path
+                d="M20 12.1V19.3H18.4V16.9H5.6V19.3H4V6.5H5.6V14.5H12V8.9H16.8C17.6487 8.9 18.4626 9.23714 19.0627 9.83726C19.6629 10.4374 20 11.2513 20 12.1ZM8.8 13.7C8.16348 13.7 7.55303 13.4471 7.10294 12.9971C6.65286 12.547 6.4 11.9365 6.4 11.3C6.4 10.6635 6.65286 10.053 7.10294 9.60294C7.55303 9.15286 8.16348 8.9 8.8 8.9C9.43652 8.9 10.047 9.15286 10.4971 9.60294C10.9471 10.053 11.2 10.6635 11.2 11.3C11.2 11.9365 10.9471 12.547 10.4971 12.9971C10.047 13.4471 9.43652 13.7 8.8 13.7Z"
+                fill={props?.color || '#95B0B4'}
+            />
+        </svg>
+    );
+};

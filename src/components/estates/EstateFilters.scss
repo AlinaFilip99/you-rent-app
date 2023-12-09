@@ -1,0 +1,21 @@
+.estate-filters-menu {
+    .filter-item {
+        &:last-child {
+            --border-style: none;
+        }
+        margin-bottom: 15px;
+        --padding-start: 0px;
+        --inner-padding-end: 0px;
+        .no-wrap {
+            flex-wrap: nowrap;
+        }
+    }
+    .menu-footer {
+        // ion-toolbar {
+        //     --border-style: none;
+        // }
+        ion-button {
+            width: 70%;
+        }
+    }
+}
