@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { IonButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
-import { optionsOutline, searchOutline } from 'ionicons/icons';
+import { IonButton, IonFab, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
+import { add, optionsOutline, searchOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core/components';
 
 import './EstateList.scss';
+import EstateItemList from './EstateItemList';
+import EstateFilters from './EstateFilters';
+import EstateAddEdit from './EstateAddEdit';
 import PageLayout from '../base/PageLayout';
 import { getEstates } from '../../services/estate';
 import PageInfo from '../base/PageInfo';
-import EstateItemList from './EstateItemList';
-import EstateFilters from './EstateFilters';
 
 const EstateList = () => {
     const [estates, setEstates] = useState<IEstate[]>();
@@ -16,6 +17,7 @@ const EstateList = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [appliedFilters, setAppliedFilters] = useState<IEstateFilterValues>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [showEstateAddEdit, setShowEstateAddEdit] = useState<boolean>(false);
 
     useEffect(() => {
         load();
@@ -128,9 +130,14 @@ const EstateList = () => {
         setAppliedFilters(newFilters);
     };
 
+    const onCloseAddEdit = () => {
+        setShowEstateAddEdit(false);
+    };
+
     return (
         <>
             <EstateFilters onClose={closeFilters} applyFilters={onApplyFilters} />
+            <EstateAddEdit isVisible={showEstateAddEdit} onClose={onCloseAddEdit} />
             <PageLayout
                 pageClassName="estates-page"
                 isLoading={isLoading}
@@ -156,6 +163,11 @@ const EstateList = () => {
                 ) : (
                     <PageInfo icon={<IonIcon icon={searchOutline} />} />
                 )}
+                <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
+                    <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
+                        <IonIcon icon={add}></IonIcon>
+                    </IonFabButton>
+                </IonFab>
             </PageLayout>
         </>
     );

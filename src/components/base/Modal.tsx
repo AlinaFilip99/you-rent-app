@@ -10,11 +10,20 @@ interface IModal {
     onEndButtonClick?: React.MouseEventHandler<HTMLIonButtonElement>;
     children: React.ReactNode;
     footerContent?: React.ReactNode;
+    extraClassNames?: string;
 }
 
-const Modal: React.FC<IModal> = ({ isVisible, modalTitle, onStartButtonClick, onEndButtonClick, children, footerContent }) => {
+const Modal: React.FC<IModal> = ({
+    isVisible,
+    modalTitle,
+    onStartButtonClick,
+    onEndButtonClick,
+    children,
+    footerContent,
+    extraClassNames
+}) => {
     return (
-        <IonModal isOpen={isVisible} className="generic-modal">
+        <IonModal isOpen={isVisible} className={'generic-modal ' + extraClassNames}>
             <IonHeader>
                 <IonToolbar class="modal-toolbar">
                     {onStartButtonClick && (

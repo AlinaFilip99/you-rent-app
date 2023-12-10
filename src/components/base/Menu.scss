@@ -1,5 +1,5 @@
 .generic-menu {
     ion-toolbar {
-        --background: #fff;
+        --background: var(--ion-color-background-page);
     }
 }

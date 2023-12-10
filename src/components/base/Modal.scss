@@ -1,5 +1,6 @@
 .generic-modal {
     ion-toolbar.modal-toolbar {
+        --background: var(--ion-color-background-page);
         padding: 6px 0;
         ion-button {
             font-weight: 500;

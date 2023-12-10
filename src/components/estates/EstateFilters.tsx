@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Menu from '../base/Menu';
-import { IonButton, IonInput, IonItem, IonLabel, IonList, IonRange, IonRow, IonToggle } from '@ionic/react';
+import { IonButton, IonCheckbox, IonInput, IonItem, IonLabel, IonList, IonRange, IonRow, IonToggle } from '@ionic/react';
 import './EstateFilters.scss';
 
 interface IEstateFilters {
@@ -143,7 +143,7 @@ const EstateFilters: React.FC<IEstateFilters> = ({ onClose, applyFilters }) => {
                 </IonItem>
                 <IonItem className="filter-item">
                     <IonLabel>With pictures</IonLabel>
-                    <IonToggle mode="md" checked={withPictures} onIonChange={() => setWithPictures(!withPictures)}></IonToggle>
+                    <IonCheckbox checked={withPictures} onIonChange={() => setWithPictures(!withPictures)}></IonCheckbox>
                 </IonItem>
                 <IonItem className="filter-item">
                     <IonRow>
@@ -210,19 +210,11 @@ const EstateFilters: React.FC<IEstateFilters> = ({ onClose, applyFilters }) => {
                 </IonItem>
                 <IonItem className="filter-item">
                     <IonLabel>With private parking</IonLabel>
-                    <IonToggle
-                        mode="md"
-                        checked={includeParking}
-                        onIonChange={() => setIncludeParking(!includeParking)}
-                    ></IonToggle>
+                    <IonCheckbox checked={includeParking} onIonChange={() => setIncludeParking(!includeParking)}></IonCheckbox>
                 </IonItem>
                 <IonItem className="filter-item">
                     <IonLabel>With extra storage</IonLabel>
-                    <IonToggle
-                        mode="md"
-                        checked={includeStorage}
-                        onIonChange={() => setIncludeStorage(!includeStorage)}
-                    ></IonToggle>
+                    <IonCheckbox checked={includeStorage} onIonChange={() => setIncludeStorage(!includeStorage)}></IonCheckbox>
                 </IonItem>
                 <IonItem className="filter-item">
                     <IonRow>
