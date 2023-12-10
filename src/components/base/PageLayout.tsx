@@ -1,4 +1,4 @@
-import { IonContent, IonLoading, IonPage, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonHeader, IonLoading, IonPage, IonRefresher, IonRefresherContent } from '@ionic/react';
 import React, { useMemo } from 'react';
 
 interface ILoginRegisterPage {
@@ -7,9 +7,17 @@ interface ILoginRegisterPage {
     children: React.ReactNode;
     contentRef?: React.RefObject<HTMLIonContentElement>;
     onRefresh?: Function;
+    headerContent?: React.ReactNode;
 }
 
-const PageLayout: React.FC<ILoginRegisterPage> = ({ isLoading, children, contentRef, pageClassName, onRefresh }) => {
+const PageLayout: React.FC<ILoginRegisterPage> = ({
+    isLoading,
+    children,
+    contentRef,
+    pageClassName,
+    onRefresh,
+    headerContent
+}) => {
     const tabBar = document.getElementById('app-tab-bar');
 
     const pageHeightAdjustValue = useMemo(() => {
@@ -26,9 +34,10 @@ const PageLayout: React.FC<ILoginRegisterPage> = ({ isLoading, children, content
     );
 
     return (
-        <IonPage className={pageClassName} style={{ height: pageHeight }}>
+        <IonPage className={pageClassName} style={{ height: pageHeight }} id="main-content">
+            {headerContent && <IonHeader collapse="fade">{headerContent}</IonHeader>}
             <IonLoading isOpen={isLoading} message="Loading" />
-            <IonContent className="ion-padding" ref={contentRef}>
+            <IonContent className="ion-padding custom-padding" ref={contentRef}>
                 {onRefresh && (
                     <IonRefresher
                         slot="fixed"

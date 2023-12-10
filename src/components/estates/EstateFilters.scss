@@ -1,0 +1,23 @@
+.estate-filters-menu {
+    .filter-item {
+        color: var(--ion-color-medium-shade);
+        ion-row {
+            width: 100%;
+        }
+        ion-label {
+            margin-inline: 0px 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        --padding-start: 0px;
+        --inner-padding-end: 0px;
+        .no-wrap {
+            flex-wrap: nowrap;
+        }
+        &:first-child {
+            ion-label {
+                margin: unset;
+            }
+        }
+    }
+}

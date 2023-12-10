@@ -23,7 +23,7 @@ const Login = () => {
             if (response.user) {
                 present({
                     color: 'success',
-                    message: 'Account created successfully!',
+                    message: 'Logged in successfully!',
                     duration: 700,
                     position: 'top',
                     onDidDismiss: () => {

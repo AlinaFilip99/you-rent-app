@@ -1,0 +1,39 @@
+.estates-page {
+    ion-row.header-row {
+        padding: 16px 18px;
+        padding-bottom: 20px;
+        flex-wrap: nowrap;
+        ion-searchbar {
+            padding: unset;
+            --background: #95b0b41a;
+            --color: var(--ion-color-medium);
+            --placeholder-color: var(--ion-color-light);
+            --icon-color: var(--ion-color-light);
+            --clear-button-color: var(--ion-color-medium);
+            .searchbar-input {
+                padding-inline-start: 50px !important;
+            }
+            .searchbar-search-icon {
+                inset-inline-start: 14px !important;
+            }
+            .searchbar-input-container.sc-ion-searchbar-ios {
+                min-height: 50px;
+            }
+        }
+        ion-button {
+            margin: unset;
+            height: 50px;
+            margin-left: 10px;
+            --padding-top: 0px;
+            --padding-bottom: 0px;
+            --padding-end: 0px;
+            --padding-start: 10px;
+        }
+    }
+    .ion-padding {
+        --padding-top: 0px;
+        --padding-bottom: 20px;
+        padding-top: 0px;
+        padding-bottom: 20px;
+    }
+}

@@ -1,0 +1,46 @@
+.estate-list-item {
+    --padding-start: 0px;
+    --inner-padding-end: 0px;
+    .estate-image {
+        width: 90px;
+        height: 90px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    ion-row {
+        flex-wrap: nowrap;
+    }
+    .estate-item {
+        width: 100%;
+        .estate-data {
+            width: 100%;
+            margin-left: 10px;
+            flex-direction: column;
+            justify-content: space-between;
+            .estate-details {
+                flex-wrap: wrap;
+                color: var(--ion-color-light);
+                font-size: 13px;
+                .estate-detail {
+                    align-items: center;
+                    gap: 5px;
+                    width: 49%;
+                    ion-icon {
+                        height: 20px;
+                        width: 20px;
+                        padding: 2px;
+                    }
+                }
+            }
+            .estate-name-price {
+                color: var(--ion-color-medium);
+                font-size: 16px;
+                font-weight: 500;
+                .estate-price {
+                    color: var(--ion-color-secondary);
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
