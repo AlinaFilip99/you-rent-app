@@ -36,3 +36,31 @@ ion-tab-bar {
         }
     }
 }
+
+ion-toggle {
+    width: 32px;
+    height: 22px;
+    padding-right: 3px;
+    --track-background: var(--ion-color-light-tint);
+    --track-background-checked: var(--ion-color-light-tint);
+}
+ion-toggle::part(handle) {
+    background: #fff;
+    border: 1px solid var(--track-background);
+}
+ion-toggle.toggle-checked::part(handle) {
+    color: var(--ion-color-primary);
+    border: 1px solid var(--ion-color-primary);
+}
+ion-toggle.toggle-checked::part(track) {
+    background: var(--ion-color-primary);
+}
+
+ion-range {
+    --bar-background: var(--ion-color-primary);
+    --bar-background-active: var(--ion-color-light-tint);
+}
+
+ion-toolbar {
+    color: var(--ion-color-medium);
+}

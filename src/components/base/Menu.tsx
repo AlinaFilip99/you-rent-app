@@ -9,12 +9,12 @@ interface IMenu {
     menuTitle: string;
     menuId: string;
     footerContent?: React.ReactNode;
-    onClear?: Function;
-    onClose?: Function;
+    startButtons?: React.ReactNode;
+    endButtons?: React.ReactNode;
     extraClassNames?: string;
 }
 
-const Menu: React.FC<IMenu> = ({ children, menuTitle, menuId, footerContent, onClear, onClose, extraClassNames }) => {
+const Menu: React.FC<IMenu> = ({ children, menuTitle, menuId, footerContent, startButtons, endButtons, extraClassNames }) => {
     return (
         <IonMenu
             menuId={menuId}
@@ -25,31 +25,9 @@ const Menu: React.FC<IMenu> = ({ children, menuTitle, menuId, footerContent, onC
         >
             <IonHeader>
                 <IonToolbar>
-                    {onClear && (
-                        <IonButtons slot="start">
-                            <IonButton
-                                onClick={(ev) => {
-                                    onClear(ev);
-                                }}
-                                className="start-button"
-                            >
-                                Clear
-                            </IonButton>
-                        </IonButtons>
-                    )}
+                    {startButtons && <IonButtons slot="start">{startButtons}</IonButtons>}
                     <IonTitle>{capitalize(menuTitle)}</IonTitle>
-                    {onClose && (
-                        <IonButtons slot="end">
-                            <IonButton
-                                fill="clear"
-                                onClick={(ev) => {
-                                    onClose(ev);
-                                }}
-                            >
-                                <IonIcon slot="icon-only" icon={closeOutline}></IonIcon>
-                            </IonButton>
-                        </IonButtons>
-                    )}
+                    {endButtons && <IonButtons slot="end">{endButtons}</IonButtons>}
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">{children}</IonContent>

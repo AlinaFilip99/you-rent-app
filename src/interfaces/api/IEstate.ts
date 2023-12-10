@@ -16,7 +16,7 @@ interface IEstate extends IBaseObject {
     region?: string;
     addressExtra?: string;
     heetingType?: string;
-    constructionYear?: string;
+    constructionYear?: number;
     hasPrivateParking?: boolean;
     hasExtraStorage?: boolean;
     pictures?: { url: string }[];

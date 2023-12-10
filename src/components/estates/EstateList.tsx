@@ -14,6 +14,7 @@ const EstateList = () => {
     const [estates, setEstates] = useState<IEstate[]>();
     const [initialEstateList, setInitialEstateList] = useState<IEstate[]>();
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [appliedFilters, setAppliedFilters] = useState<IEstateFilterValues>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const EstateList = () => {
 
     useEffect(() => {
         filterEstates();
-    }, [searchQuery]);
+    }, [searchQuery, appliedFilters]);
 
     const load = async () => {
         setIsLoading(true);
@@ -34,6 +35,58 @@ const EstateList = () => {
         setIsLoading(false);
     };
 
+    const setIncludeItemByRange = (includeItem: boolean, estateValue: number, range?: IRange) => {
+        if (range) {
+            if (range.lower && estateValue < range.lower) {
+                includeItem = false;
+            }
+            if (range.upper && estateValue > range.upper) {
+                includeItem = false;
+            }
+        }
+        return includeItem;
+    };
+
+    const setIncludeItemByAppliedFilters = (includeItem: boolean, estate: IEstate) => {
+        if (appliedFilters) {
+            let score = estate.score ? (estate.score * 5) / 100 : 0;
+            let {
+                minScore,
+                price,
+                bedrooms,
+                bathrooms,
+                habitableSurface,
+                constructionYear,
+                includeParking,
+                includeStorage,
+                withPictures
+            } = appliedFilters;
+
+            if (minScore && score < minScore) {
+                includeItem = false;
+            }
+
+            includeItem = setIncludeItemByRange(includeItem, estate.price, price);
+            includeItem = setIncludeItemByRange(includeItem, estate.bedrooms, bedrooms);
+            includeItem = setIncludeItemByRange(includeItem, estate.bathrooms, bathrooms);
+            includeItem = setIncludeItemByRange(includeItem, estate.habitableArea, habitableSurface);
+            if (estate.constructionYear) {
+                includeItem = setIncludeItemByRange(includeItem, estate.constructionYear, constructionYear);
+            }
+
+            if (includeParking && !estate.hasPrivateParking) {
+                includeItem = false;
+            }
+            if (includeStorage && !estate.hasExtraStorage) {
+                includeItem = false;
+            }
+            if (withPictures && !(estate.pictures && estate.pictures.length > 0)) {
+                includeItem = false;
+            }
+        }
+        return includeItem;
+    };
+
     const filterEstates = () => {
         if (!initialEstateList) {
             return;
@@ -42,9 +95,13 @@ const EstateList = () => {
 
         newValue = newValue.filter((x) => {
             let includeItem = true;
-            if (searchQuery && !x.name.includes(searchQuery)) {
+
+            if (searchQuery && !x.name.toLowerCase().includes(searchQuery.toLowerCase())) {
                 includeItem = false;
             }
+
+            includeItem = setIncludeItemByAppliedFilters(includeItem, x);
+
             return includeItem;
         });
 
@@ -67,8 +124,8 @@ const EstateList = () => {
         await menuController.close('filters-menu');
     };
 
-    const onApplyFilters = () => {
-        //tbd
+    const onApplyFilters = (newFilters: IEstateFilterValues) => {
+        setAppliedFilters(newFilters);
     };
 
     return (
