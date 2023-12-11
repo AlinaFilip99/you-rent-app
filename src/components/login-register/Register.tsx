@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
-import { checkmarkOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { checkmarkOutline, closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { signUp } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
+import { capitalize } from '../../utils/util';
+import Init from '../../services/init';
 
 const Register = () => {
     const appState = useContext(AppContext);
@@ -14,6 +16,27 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [acceptPolicy, setacceptPolicy] = useState(false);
+
+    const setNotification = (message: string, type?: string, callback?: Function) => {
+        present({
+            message: capitalize(message),
+            duration: type === 'error' ? undefined : 1500,
+            position: 'top',
+            buttons:
+                type === 'error'
+                    ? [
+                          {
+                              icon: closeOutline,
+                              role: 'cancel'
+                          }
+                      ]
+                    : undefined,
+            color: type === 'error' ? 'danger' : 'success',
+            onDidDismiss: () => {
+                callback && callback();
+            }
+        });
+    };
 
     const onPasswordInput = (ev: Event) => {
         const value = (ev.target as HTMLIonInputElement).value as string;
@@ -49,24 +72,14 @@ const Register = () => {
             let response = await signUp(email, password);
             console.log({ response });
             if (response.user) {
-                present({
-                    color: 'success',
-                    message: 'Account created successfully!',
-                    duration: 700,
-                    position: 'top',
-                    onDidDismiss: () => {
-                        appState?.setState({ ...appState.state, isAuthenticated: true });
-                        window.location.href = '/estates';
-                    }
+                await new Init().initUserProfile(response.user);
+                setNotification('Account created successfully!', 'success', () => {
+                    appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
+                    window.location.href = '/estates';
                 });
             }
         } catch (error) {
-            present({
-                color: 'danger',
-                message: 'Error!',
-                duration: 1500,
-                position: 'top'
-            });
+            setNotification('Error!', 'error');
         }
         setIsLoading(false);
     };

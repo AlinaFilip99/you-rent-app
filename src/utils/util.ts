@@ -1,9 +1,9 @@
-/**
- * Capitalizes a string
- * @param str
- */
 export const capitalize = (str = '') => {
     return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+};
+
+export const formatISODateTime = (date: moment.Moment) => {
+    return date.format('YYYY-MM-DDTHH:mm:ss');
 };
 
 export const setTabBarVisibility = () => {

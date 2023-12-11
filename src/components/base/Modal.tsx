@@ -7,7 +7,9 @@ interface IModal {
     isVisible: boolean;
     modalTitle: string;
     onStartButtonClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+    startButtonLabel?: string;
     onEndButtonClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+    endButtonLabel?: string;
     children: React.ReactNode;
     footerContent?: React.ReactNode;
     extraClassNames?: string;
@@ -17,7 +19,9 @@ const Modal: React.FC<IModal> = ({
     isVisible,
     modalTitle,
     onStartButtonClick,
+    startButtonLabel,
     onEndButtonClick,
+    endButtonLabel,
     children,
     footerContent,
     extraClassNames
@@ -34,7 +38,7 @@ const Modal: React.FC<IModal> = ({
                                 }}
                                 className="start-button"
                             >
-                                Cancel
+                                {startButtonLabel ? startButtonLabel : 'Cancel'}
                             </IonButton>
                         </IonButtons>
                     )}
@@ -46,7 +50,7 @@ const Modal: React.FC<IModal> = ({
                                     onEndButtonClick(ev);
                                 }}
                             >
-                                Done
+                                {endButtonLabel ? endButtonLabel : 'Done'}
                             </IonButton>
                         </IonButtons>
                     )}

@@ -40,7 +40,7 @@ ion-tab-bar {
 ion-toggle {
     width: 32px;
     height: 22px;
-    padding-right: 3px;
+    padding-right: 6px;
     --track-background: var(--ion-color-light-tint);
     --track-background-checked: var(--ion-color-light-tint);
 }
@@ -63,4 +63,8 @@ ion-range {
 
 ion-toolbar {
     color: var(--ion-color-medium-shade);
+}
+
+ion-header {
+    --opacity-scale: 0 !important;
 }

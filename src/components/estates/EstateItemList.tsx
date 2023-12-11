@@ -2,6 +2,7 @@ import React from 'react';
 import { IonList } from '@ionic/react';
 
 import EstateListItem from './EstateListItem';
+import IEstate from '../../interfaces/api/IEstate';
 
 interface IEstateItemList {
     data: IEstate[];

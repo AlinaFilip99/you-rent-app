@@ -1,7 +1,8 @@
 import { RefresherEventDetail } from '@ionic/react';
+import { User } from 'firebase/auth';
 interface IAppState {
     isAuthenticated: boolean;
-    user: any;
+    user: User | null;
     refreshEvent: CustomEvent<RefresherEventDetail> | null;
 }
 

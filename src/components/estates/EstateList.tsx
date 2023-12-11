@@ -10,6 +10,7 @@ import EstateAddEdit from './EstateAddEdit';
 import PageLayout from '../base/PageLayout';
 import { getEstates } from '../../services/estate';
 import PageInfo from '../base/PageInfo';
+import IEstate from '../../interfaces/api/IEstate';
 
 const EstateList = () => {
     const [estates, setEstates] = useState<IEstate[]>();
@@ -28,6 +29,9 @@ const EstateList = () => {
     }, [searchQuery, appliedFilters]);
 
     const load = async () => {
+        if (isLoading) {
+            return;
+        }
         setIsLoading(true);
         let response = await getEstates();
         if (response) {
@@ -82,7 +86,7 @@ const EstateList = () => {
             if (includeStorage && !estate.hasExtraStorage) {
                 includeItem = false;
             }
-            if (withPictures && !(estate.pictures && estate.pictures.length > 0)) {
+            if (withPictures && !(estate.pictureUrls && estate.pictureUrls.length > 0)) {
                 includeItem = false;
             }
         }
@@ -90,7 +94,7 @@ const EstateList = () => {
     };
 
     const filterEstates = () => {
-        if (!initialEstateList) {
+        if (!initialEstateList || isLoading) {
             return;
         }
         let newValue = [...initialEstateList];
@@ -130,8 +134,13 @@ const EstateList = () => {
         setAppliedFilters(newFilters);
     };
 
-    const onCloseAddEdit = () => {
+    const onCloseAddEdit = (refreshList?: boolean) => {
         setShowEstateAddEdit(false);
+        if (refreshList) {
+            load();
+            setSearchQuery('');
+            setAppliedFilters({});
+        }
     };
 
     return (

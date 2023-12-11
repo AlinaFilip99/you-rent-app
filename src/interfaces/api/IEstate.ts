@@ -1,8 +1,10 @@
-interface IEstate extends IBaseObject {
+import { GeoPoint } from 'firebase/firestore';
+
+export default interface IEstate extends IBaseObject {
     name: string;
     price: number;
     isActive: boolean;
-    userId: number;
+    userId: string;
     country: string;
     city: string;
     bedrooms: number;
@@ -15,9 +17,10 @@ interface IEstate extends IBaseObject {
     number?: string;
     region?: string;
     addressExtra?: string;
-    heetingType?: string;
+    heetingType?: number;
     constructionYear?: number;
     hasPrivateParking?: boolean;
     hasExtraStorage?: boolean;
-    pictures?: { url: string }[];
+    pictureUrls?: string[];
+    coordinates?: GeoPoint;
 }

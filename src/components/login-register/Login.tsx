@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { login } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
+import { capitalize } from '../../utils/util';
+import Init from '../../services/init';
 
 const Login = () => {
     const appState = useContext(AppContext);
@@ -11,6 +13,27 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const setNotification = (message: string, type?: string, callback?: Function) => {
+        present({
+            message: capitalize(message),
+            duration: type === 'error' ? undefined : 1500,
+            position: 'top',
+            buttons:
+                type === 'error'
+                    ? [
+                          {
+                              icon: closeOutline,
+                              role: 'cancel'
+                          }
+                      ]
+                    : undefined,
+            color: type === 'error' ? 'danger' : 'success',
+            onDidDismiss: () => {
+                callback && callback();
+            }
+        });
+    };
 
     const onLogin = async () => {
         if (!email || !password) {
@@ -21,24 +44,14 @@ const Login = () => {
             let response = await login(email, password);
             console.log({ response });
             if (response.user) {
-                present({
-                    color: 'success',
-                    message: 'Logged in successfully!',
-                    duration: 700,
-                    position: 'top',
-                    onDidDismiss: () => {
-                        appState?.setState({ ...appState.state, isAuthenticated: true });
-                        window.location.href = '/estates';
-                    }
+                await new Init().initUserProfile(response.user);
+                setNotification('Logged in successfully!', 'success', () => {
+                    appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
+                    window.location.href = '/estates';
                 });
             }
         } catch (error) {
-            present({
-                color: 'danger',
-                message: 'Error!',
-                duration: 1500,
-                position: 'top'
-            });
+            setNotification('Error!', 'error');
         }
         setIsLoading(false);
     };
