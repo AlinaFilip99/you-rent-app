@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { login } from '../../services/user';
+import { closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { login, sendResetPasswordEmail } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
+import { capitalize } from '../../utils/util';
+import Init from '../../services/init';
 
 const Login = () => {
     const appState = useContext(AppContext);
@@ -12,6 +14,27 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const setNotification = (message: string, type?: string, callback?: Function) => {
+        present({
+            message: capitalize(message),
+            duration: type === 'error' ? undefined : 1500,
+            position: 'top',
+            buttons:
+                type === 'error'
+                    ? [
+                          {
+                              icon: closeOutline,
+                              role: 'cancel'
+                          }
+                      ]
+                    : undefined,
+            color: type === 'error' ? 'danger' : 'success',
+            onDidDismiss: () => {
+                callback && callback();
+            }
+        });
+    };
+
     const onLogin = async () => {
         if (!email || !password) {
             return;
@@ -19,26 +42,16 @@ const Login = () => {
         setIsLoading(true);
         try {
             let response = await login(email, password);
-            console.log({ response });
+
             if (response.user) {
-                present({
-                    color: 'success',
-                    message: 'Logged in successfully!',
-                    duration: 700,
-                    position: 'top',
-                    onDidDismiss: () => {
-                        appState?.setState({ ...appState.state, isAuthenticated: true });
-                        window.location.href = '/estates';
-                    }
+                await new Init().initUserProfile(response.user);
+                setNotification('Logged in successfully!', 'success', () => {
+                    appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
+                    window.location.href = '/estates';
                 });
             }
         } catch (error) {
-            present({
-                color: 'danger',
-                message: 'Error!',
-                duration: 1500,
-                position: 'top'
-            });
+            setNotification('Error!', 'error');
         }
         setIsLoading(false);
     };
@@ -51,6 +64,24 @@ const Login = () => {
     const onPasswordInput = (ev: Event) => {
         const value = (ev.target as HTMLIonInputElement).value as string;
         setPassword(value);
+    };
+
+    const onResetPassword = async () => {
+        if (isLoading) {
+            return;
+        }
+        if (email) {
+            setIsLoading(true);
+            let response = await sendResetPasswordEmail(email);
+            if (response) {
+                setNotification('Reset password email successfully sent!');
+            } else {
+                setNotification('Error sending reset password email!', 'error');
+            }
+        } else {
+            setNotification('Please fill in the email!', 'error');
+        }
+        setIsLoading(false);
     };
 
     return (
@@ -90,7 +121,7 @@ const Login = () => {
                 </div>
             </IonRow>
             <IonButton onClick={onLogin}>SIGN IN</IonButton>
-            <IonText className="forgot-password" color="primary">
+            <IonText className="forgot-password" color="primary" onClick={onResetPassword}>
                 Forgot password?
             </IonText>
         </>

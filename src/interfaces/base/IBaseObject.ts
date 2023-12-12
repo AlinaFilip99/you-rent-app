@@ -1,3 +1,3 @@
 interface IBaseObject {
-    id: string;
+    id?: string;
 }

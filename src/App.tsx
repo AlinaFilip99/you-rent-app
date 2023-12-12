@@ -33,6 +33,7 @@ import { getToken } from './utils/localStorageUtil';
 import LoginPage from './pages/LoginPage';
 import EstatesPage from './pages/EstatesPage';
 import RegisterPage from './pages/RegisterPage';
+import EstateViewPage from './pages/EstateViewPage';
 
 setupIonicReact({ mode: 'ios' });
 
@@ -69,6 +70,7 @@ const App: React.FC = () => {
                                 <Redirect to="/estates" />
                             </Route>
                             <PrivateRoute path="/estates" component={EstatesPage} exact={true}></PrivateRoute>
+                            <PrivateRoute path="/estate/:id" component={EstateViewPage} exact={true}></PrivateRoute>
                         </IonRouterOutlet>
 
                         <IonTabBar slot="bottom" mode="ios" id="app-tab-bar" style={{ display: 'none' }}>
@@ -77,10 +79,10 @@ const App: React.FC = () => {
                                 <IonLabel>Home</IonLabel>
                             </IonTabButton>
 
-                            <IonTabButton tab="requests" href="/requests">
+                            {/* <IonTabButton tab="requests" href="/requests">
                                 <NotificationIcon />
                                 <IonLabel>Requests</IonLabel>
-                            </IonTabButton>
+                            </IonTabButton> */}
 
                             <IonTabButton tab="profile" href="/profile">
                                 <UserProfileIcon />

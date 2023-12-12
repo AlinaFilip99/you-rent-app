@@ -1,0 +1,64 @@
+.estate-description-section {
+    .estate-details {
+        color: var(--ion-color-light);
+        font-size: 13px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        .estate-detail {
+            margin-bottom: 10px;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 5px;
+            width: 49%;
+            ion-icon {
+                height: 20px;
+                width: 20px;
+                padding: 2px;
+            }
+            svg {
+                min-width: 24px;
+            }
+        }
+    }
+    .estate-description {
+        font-size: 13px;
+        color: rgba(50, 75, 78, 0.75);
+        margin-bottom: 15px;
+    }
+    .estate-map {
+        height: 150px;
+        div:first-child {
+            border-radius: 10px;
+        }
+    }
+    .estate-user-request {
+        margin-top: 15px;
+        align-items: center;
+        .user-picture {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            margin-right: 13px;
+        }
+        .user-name {
+            color: var(--ion-color-medium);
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .user-type {
+            color: rgba(50, 75, 78, 0.75);
+            font-size: 12px;
+        }
+        .request-button {
+            margin: unset;
+            margin-left: auto;
+            min-height: 36px;
+            height: 36px;
+            width: 36px;
+            --padding-end: 4px;
+            --padding-start: 4px;
+            --border-radius: 10px;
+        }
+    }
+}

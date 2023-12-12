@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
-import { IonButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
-import { optionsOutline, searchOutline } from 'ionicons/icons';
+import { IonButton, IonFab, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
+import { add, optionsOutline, searchOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core/components';
+import { useHistory } from 'react-router-dom';
 
 import './EstateList.scss';
+import EstateItemList from './EstateItemList';
+import EstateFilters from './EstateFilters';
+import EstateAddEdit from './EstateAddEdit';
 import PageLayout from '../base/PageLayout';
 import { getEstates } from '../../services/estate';
 import PageInfo from '../base/PageInfo';
-import EstateItemList from './EstateItemList';
-import EstateFilters from './EstateFilters';
+import IEstate from '../../interfaces/api/IEstate';
 
 const EstateList = () => {
+    let history = useHistory();
     const [estates, setEstates] = useState<IEstate[]>();
     const [initialEstateList, setInitialEstateList] = useState<IEstate[]>();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [appliedFilters, setAppliedFilters] = useState<IEstateFilterValues>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [showEstateAddEdit, setShowEstateAddEdit] = useState<boolean>(false);
 
     useEffect(() => {
         load();
@@ -26,6 +31,9 @@ const EstateList = () => {
     }, [searchQuery, appliedFilters]);
 
     const load = async () => {
+        if (isLoading) {
+            return;
+        }
         setIsLoading(true);
         let response = await getEstates();
         if (response) {
@@ -80,7 +88,7 @@ const EstateList = () => {
             if (includeStorage && !estate.hasExtraStorage) {
                 includeItem = false;
             }
-            if (withPictures && !(estate.pictures && estate.pictures.length > 0)) {
+            if (withPictures && !(estate.pictureUrls && estate.pictureUrls.length > 0)) {
                 includeItem = false;
             }
         }
@@ -88,7 +96,7 @@ const EstateList = () => {
     };
 
     const filterEstates = () => {
-        if (!initialEstateList) {
+        if (!initialEstateList || isLoading) {
             return;
         }
         let newValue = [...initialEstateList];
@@ -128,9 +136,25 @@ const EstateList = () => {
         setAppliedFilters(newFilters);
     };
 
+    const onCloseAddEdit = (refreshList?: boolean) => {
+        setShowEstateAddEdit(false);
+        if (refreshList) {
+            load();
+            setSearchQuery('');
+            setAppliedFilters({});
+        }
+    };
+
+    const onViewEstate = (estateId?: string) => {
+        if (estateId) {
+            history.push('/estate/' + estateId);
+        }
+    };
+
     return (
         <>
             <EstateFilters onClose={closeFilters} applyFilters={onApplyFilters} />
+            <EstateAddEdit isVisible={showEstateAddEdit} onClose={onCloseAddEdit} />
             <PageLayout
                 pageClassName="estates-page"
                 isLoading={isLoading}
@@ -152,7 +176,14 @@ const EstateList = () => {
                 }
             >
                 {estates && estates.length > 0 ? (
-                    <EstateItemList data={estates} />
+                    <>
+                        <EstateItemList data={estates} onItemClick={onViewEstate} />
+                        <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
+                            <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
+                                <IonIcon icon={add}></IonIcon>
+                            </IonFabButton>
+                        </IonFab>
+                    </>
                 ) : (
                     <PageInfo icon={<IonIcon icon={searchOutline} />} />
                 )}
