@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     IonCheckbox,
     IonIcon,
@@ -23,23 +23,25 @@ import { HeetingType } from '../../utils/enums';
 import SelectOnMap from '../base/SelectOnMap';
 import GenericMap from '../base/GenericMap';
 import { validateFiles } from '../../utils/fileUtils';
-import { getFileUrl, uploadFile } from '../../services/file';
+import { deleteFile, getFileUrl, uploadFile } from '../../services/file';
 import IEstate from '../../interfaces/api/IEstate';
-import { addEstate } from '../../services/estate';
+import { addEstate, updateEstate } from '../../services/estate';
 import { capitalize } from '../../utils/util';
 import userProfile from '../../services/userProfile';
 
 interface IEstateAddEdit {
     isVisible: boolean;
     onClose: Function;
+    estate?: IEstate;
 }
 
-const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
+const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate }) => {
     const validExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'heic'];
     const [present] = useIonToast();
     const inputRef = useRef<HTMLInputElement>(null);
     const [showExtraAddressFields, setShowExtraAddressFields] = useState<boolean>(false);
     const [photos, setPhotos] = useState<File[]>();
+    const [initialPhotos, setInitialPhotos] = useState<File[]>();
     const [showMap, setShowMap] = useState<boolean>(false);
     const [coordinates, setCoordinates] = useState<GeoPoint>();
     const [title, setTitle] = useState<string>();
@@ -59,7 +61,60 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
     const [heetingType, setHeetingType] = useState<number>();
     const [parking, setParking] = useState<boolean>(false);
     const [storage, setStorage] = useState<boolean>(false);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (estate) {
+            setIsEdit(true);
+            setEstateData();
+        } else {
+            resetState();
+        }
+    }, [estate]);
+
+    const getFileNames = () => {
+        let pictureUrls: File[];
+        if (estate?.pictureUrls) {
+            pictureUrls = [];
+            estate.pictureUrls.forEach((x) => {
+                let startIndex = x.lastIndexOf('/'),
+                    endIndex = x.indexOf('?');
+
+                if (endIndex === -1) {
+                    endIndex = x.length;
+                }
+
+                let picture = new File([''], decodeURIComponent(x.slice(startIndex + 1, endIndex)));
+                pictureUrls.push(picture);
+            });
+
+            setInitialPhotos(pictureUrls);
+            return pictureUrls;
+        }
+    };
+
+    const setEstateData = () => {
+        setPhotos(getFileNames());
+        setCoordinates(estate?.coordinates);
+        setTitle(estate?.name);
+        setPrice(estate?.price);
+        setDescription(estate?.description);
+        setCity(estate?.city);
+        setCountry(estate?.country);
+        setRegion(estate?.region);
+        setZip(estate?.zip);
+        setNumber(estate?.region);
+        setStreet(estate?.street);
+        setExtraInfo(estate?.addressExtra);
+        setBedrooms(estate?.bedrooms);
+        setBathrooms(estate?.bathrooms);
+        setSurface(estate?.habitableArea);
+        setConstructionYear(estate?.constructionYear);
+        setHeetingType(estate?.heetingType);
+        setParking(estate?.hasPrivateParking || false);
+        setStorage(estate?.hasExtraStorage || false);
+    };
 
     const setNotification = (message: string, type?: string, callback?: Function) => {
         present({
@@ -82,7 +137,8 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
         });
     };
 
-    const onCancel = () => {
+    const resetState = () => {
+        setIsEdit(false);
         setShowExtraAddressFields(false);
         setPhotos(undefined);
         setCoordinates(undefined);
@@ -103,6 +159,10 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
         setHeetingType(undefined);
         setParking(false);
         setStorage(false);
+    };
+
+    const onCancel = () => {
+        resetState();
         onClose();
     };
 
@@ -138,22 +198,58 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
         let pictureUrls: string[] = [];
         if (photos && photos.length) {
             for (let x of photos) {
-                let response = await uploadFile(x);
-                if (response) {
-                    pictureUrls.push(await getFileUrl(response.fullPath));
+                if (x.size > 0) {
+                    let response = await uploadFile(x);
+                    if (response) {
+                        pictureUrls.push(await getFileUrl(response.fullPath));
+                    }
+                } else {
+                    pictureUrls.push(await getFileUrl(x.name));
+                }
+            }
+        }
+        if (isEdit && initialPhotos && initialPhotos?.length > 0) {
+            for (let x of initialPhotos) {
+                if (photos) {
+                    if (!photos.some((y) => x.name === y.name)) {
+                        try {
+                            await deleteFile(x.name);
+                        } catch (error) {
+                            console.log({ error });
+                        }
+                    }
+                } else {
+                    try {
+                        await deleteFile(x.name);
+                    } catch (error) {
+                        console.log({ error });
+                    }
                 }
             }
         }
         if (pictureUrls.length > 0) {
             estateData.pictureUrls = pictureUrls;
         }
-
-        let response = await addEstate(estateData);
-        if (response.id) {
-            setNotification('Operation completed successfully!', 'success', () => {
-                onClose(true);
-                setIsLoading(false);
-            });
+        if (isEdit && estate && estate.id) {
+            try {
+                await updateEstate(estateData, estate.id);
+                setNotification('Operation completed successfully!', 'success', () => {
+                    resetState();
+                    onClose(true);
+                    setIsLoading(false);
+                });
+            } catch (error) {
+                setNotification('Error updating estate!', 'error');
+            }
+        } else {
+            let response = await addEstate(estateData);
+            if (response.id) {
+                setNotification('Operation completed successfully!', 'success', () => {
+                    resetState();
+                    onClose(true);
+                    setIsLoading(false);
+                });
+            }
         }
     };
 
@@ -181,7 +277,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
                     newPhotos.push(x);
                 }
             });
-            console.log({ newPhotos });
+
             setPhotos(newPhotos);
 
             if (inputRef && inputRef.current) {
@@ -226,7 +322,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose }) => {
             <SelectOnMap isVisible={showMap} onClose={onSelectLocationClose} />
             <Modal
                 isVisible={isVisible}
-                modalTitle="Create estate"
+                modalTitle={isEdit ? 'Edit estate' : 'Create estate'}
                 onStartButtonClick={onCancel}
                 onEndButtonClick={onDone}
                 extraClassNames="estate-add-edit-modal"

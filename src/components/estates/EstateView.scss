@@ -1,0 +1,94 @@
+.estate-view-page {
+    .estate-image-overlay {
+        position: relative;
+        height: 40vh;
+        .estate-image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 32.29%, rgba(0, 0, 0, 0.6) 76.04%);
+        }
+        .estate-button {
+            position: absolute;
+            top: 20px;
+            ion-icon {
+                width: 23px;
+                height: 23px;
+            }
+            &.back-button {
+                left: 20px;
+            }
+            &.edit-button {
+                right: 20px;
+                ion-icon {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+            --background: rgba(0, 0, 0, 0.24);
+            --background-hover: rgba(0, 0, 0, 0.24);
+            --background-activated: rgba(0, 0, 0, 0.24);
+            --background-focused: rgba(0, 0, 0, 0.24);
+            --border-radius: 50%;
+            --padding-start: 0px;
+            --padding-end: 0px;
+            width: 34px;
+            min-height: 34px;
+        }
+        .data-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            color: #fff;
+            svg {
+                width: 24px;
+                height: 24px;
+                path {
+                    fill: #fff;
+                }
+            }
+            ion-row {
+                flex-wrap: nowrap;
+            }
+            .estate-name {
+                font-size: 20px;
+                font-weight: 600;
+            }
+            .estate-address {
+                margin-top: 5px;
+                color: #d4d4d4;
+                font-size: 13px;
+                font-weight: 400;
+            }
+            .estate-details {
+                margin-top: 15px;
+                width: 100%;
+                .estate-detail {
+                    width: 50%;
+                    align-items: center;
+                    color: #d4d4d4;
+                    font-size: 13px;
+                    font-weight: 400;
+                    .detail-icon {
+                        width: 28px;
+                        height: 28px;
+                        padding: 2px;
+                        border-radius: 5px;
+                        background: rgba(255, 255, 255, 0.2);
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { IonButton, IonFab, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
 import { add, optionsOutline, searchOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core/components';
+import { useHistory } from 'react-router-dom';
 
 import './EstateList.scss';
 import EstateItemList from './EstateItemList';
@@ -13,6 +14,7 @@ import PageInfo from '../base/PageInfo';
 import IEstate from '../../interfaces/api/IEstate';
 
 const EstateList = () => {
+    let history = useHistory();
     const [estates, setEstates] = useState<IEstate[]>();
     const [initialEstateList, setInitialEstateList] = useState<IEstate[]>();
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -143,6 +145,12 @@ const EstateList = () => {
         }
     };
 
+    const onViewEstate = (estateId?: string) => {
+        if (estateId) {
+            history.push('/estate/' + estateId);
+        }
+    };
+
     return (
         <>
             <EstateFilters onClose={closeFilters} applyFilters={onApplyFilters} />
@@ -168,15 +176,17 @@ const EstateList = () => {
                 }
             >
                 {estates && estates.length > 0 ? (
-                    <EstateItemList data={estates} />
+                    <>
+                        <EstateItemList data={estates} onItemClick={onViewEstate} />
+                        <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
+                            <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
+                                <IonIcon icon={add}></IonIcon>
+                            </IonFabButton>
+                        </IonFab>
+                    </>
                 ) : (
                     <PageInfo icon={<IonIcon icon={searchOutline} />} />
                 )}
-                <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
-                    <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
-                        <IonIcon icon={add}></IonIcon>
-                    </IonFabButton>
-                </IonFab>
             </PageLayout>
         </>
     );

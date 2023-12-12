@@ -70,7 +70,7 @@ const Register = () => {
         setIsLoading(true);
         try {
             let response = await signUp(email, password);
-            console.log({ response });
+
             if (response.user) {
                 await new Init().initUserProfile(response.user);
                 setNotification('Account created successfully!', 'success', () => {

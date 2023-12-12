@@ -9,9 +9,10 @@ import IEstate from '../../interfaces/api/IEstate';
 
 interface IEstateListItem {
     estate: IEstate;
+    onClick: Function;
 }
 
-const EstateListItem: React.FC<IEstateListItem> = ({ estate }) => {
+const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
     const [hasPictureError, setHasPictureError] = useState<boolean>(false);
     const { scoreValue, estatePicture } = useMemo(() => {
         let value = 0,
@@ -28,7 +29,7 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate }) => {
     }, [estate, hasPictureError]);
 
     return (
-        <IonItem className="estate-list-item">
+        <IonItem className="estate-list-item" onClick={() => onClick(estate.id)}>
             <IonRow className="estate-item">
                 <img className="estate-image" src={estatePicture} alt="img" onError={() => setHasPictureError(true)} />
                 <IonRow className="estate-data">

@@ -1,0 +1,18 @@
+.show-more {
+    font-weight: 500;
+    color: var(--ion-color-primary);
+    // text-decoration: underline;
+
+    // &.expanded {
+    //     margin-left: 5px;
+    // }
+
+    &.hidden {
+        display: none;
+    }
+}
+.show-more-text {
+    white-space: initial;
+    overflow: unset !important;
+    text-overflow: unset !important;
+}

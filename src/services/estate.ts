@@ -1,6 +1,18 @@
 import IEstate from '../interfaces/api/IEstate';
+import { cleanData } from '../utils/util';
 import { db } from './firebase/firebaseConfig';
-import { getDocs, collection, addDoc, GeoPoint } from 'firebase/firestore';
+import {
+    getDocs,
+    collection,
+    addDoc,
+    GeoPoint,
+    getDoc,
+    doc,
+    updateDoc,
+    arrayUnion,
+    arrayRemove,
+    deleteField
+} from 'firebase/firestore';
 
 const collectionData = collection(db, 'estates');
 
@@ -12,14 +24,45 @@ export const getEstates = async () => {
     return responseData as IEstate[];
 };
 
+export const getEstateById = async (estateId: string) => {
+    const estateRef = doc(db, 'estates', estateId);
+    const response = await getDoc(estateRef);
+
+    let responseData;
+    if (response.exists()) {
+        responseData = { id: response.id, ...response.data() };
+    }
+
+    return responseData as IEstate | undefined;
+};
+
 export const addEstate = async (estateData: IEstate) => {
-    let cleanData: { [key: string]: number | string | boolean | undefined | string[] | GeoPoint } = { ...estateData };
-    Object.keys(cleanData).forEach((key) => {
-        if (!cleanData[key]) {
-            delete cleanData[key];
-        }
+    const response = await addDoc(collectionData, cleanData(estateData));
+    return response;
+};
+
+export const updateEstate = async (estateData: IEstate, estateId: string) => {
+    const estateRef = doc(db, 'estates', estateId);
+
+    await updateEstatePictures(estateId, estateData.pictureUrls);
+    const response = await updateDoc(estateRef, cleanData({ ...estateData }, deleteField()));
+    return response;
+};
+
+export const updateEstatePictures = async (estateId: string, newValue?: string[]) => {
+    const estateRef = doc(db, 'estates', estateId);
+
+    // remove all pictureUrls
+    await updateDoc(estateRef, {
+        pictureUrls: deleteField()
     });
 
-    const response = await addDoc(collectionData, cleanData);
-    return response;
+    if (newValue) {
+        // add new values
+        newValue.forEach(async (x) => {
+            await updateDoc(estateRef, {
+                pictureUrls: arrayUnion(x)
+            });
+        });
+    }
 };
