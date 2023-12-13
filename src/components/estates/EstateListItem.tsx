@@ -15,7 +15,7 @@ interface IEstateListItem {
 const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
     const [hasPictureError, setHasPictureError] = useState<boolean>(false);
     const { scoreValue, estatePicture } = useMemo(() => {
-        let value = 0,
+        let value,
             estatePicture = './assets/img/estate-fallback.png';
 
         if (estate.score) {
@@ -35,7 +35,7 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
                 <IonRow className="estate-data">
                     <IonRow className="estate-name-price ion-justify-content-between">
                         <div>{estate.name}</div>
-                        <div className="estate-price">{estate.price}</div>
+                        <div className="estate-price">{estate.price + ' €'}</div>
                     </IonRow>
                     {(estate.bedrooms || estate.bathrooms) && (
                         <IonRow className="estate-details ion-justify-content-between">

@@ -140,7 +140,11 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
                                 )}
                             </div>
                         </div>
-                        <StarRating score={scoreValue} />
+                        <IonRow className="estate-price-score ion-justify-content-between">
+                            <StarRating score={scoreValue} />
+                            <div className="estate-price">{estate.price + ' €'}</div>
+                        </IonRow>
+
                         <IonSegment
                             value={selectedSegment}
                             onIonChange={(ev) => setSelectedSegment(ev.target.value as string)}

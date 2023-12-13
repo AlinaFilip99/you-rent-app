@@ -91,4 +91,12 @@
             }
         }
     }
+    .estate-price-score {
+        align-items: center;
+        .estate-price {
+            font-size: 16px;
+            color: var(--ion-color-secondary);
+            font-weight: 700;
+        }
+    }
 }
