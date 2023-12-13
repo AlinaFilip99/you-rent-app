@@ -61,9 +61,9 @@ const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
                         <div className="user-name">{userName}</div>
                         <div className="user-type">Owner</div>
                     </div>
-                    <IonButton className="request-button">
+                    {/* <IonButton className="request-button">
                         <IonIcon slot="icon-only" icon={add} />
-                    </IonButton>
+                    </IonButton> */}
                 </IonRow>
             )}
             {estateDetails.length > 0 && (
