@@ -11,6 +11,7 @@ import PageInfo from '../base/PageInfo';
 import OverflowText from '../base/OverflowText';
 import StarRating from '../base/StarRating';
 import CommentsSection from '../base/CommentsSection';
+import ImageSwiper from '../base/ImageSwiper';
 import IEstate from '../../interfaces/api/IEstate';
 import { getEstateById } from '../../services/estate';
 import userProfile from '../../services/userProfile';
@@ -29,6 +30,7 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
     const [hasPictureError, setHasPictureError] = useState<boolean>(false);
     const [selectedSegment, setSelectedSegment] = useState<string>('description');
     const [showEdit, setShowEdit] = useState<boolean>(false);
+    const [viewPicturesVisible, setViewPicturesVisible] = useState<boolean>(false);
 
     const { scoreValue, estatePicture } = useMemo(() => {
         let value = 0,
@@ -78,6 +80,12 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
     return (
         <>
             <EstateAddEdit isVisible={showEdit} onClose={onEditClose} estate={editEstate} />
+            {estate?.pictureUrls && estate.pictureUrls.length > 0 && (
+                <ImageSwiper
+                    urls={estate?.pictureUrls}
+                    fullScreenMode={{ isVisible: viewPicturesVisible, onClose: () => setViewPicturesVisible(false) }}
+                />
+            )}
             <PageLayout pageClassName="estate-view-page" isLoading={isLoading}>
                 {estate ? (
                     <>
@@ -88,7 +96,12 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
                                 alt="img"
                                 onError={() => setHasPictureError(true)}
                             />
-                            <div className="image-overlay"></div>
+                            <div
+                                className="image-overlay"
+                                onClick={() => {
+                                    setViewPicturesVisible(true);
+                                }}
+                            ></div>
                             <IonButton className="estate-button back-button" onClick={() => history.goBack()}>
                                 <IonIcon slot="icon-only" icon={chevronBackOutline}></IonIcon>
                             </IonButton>
