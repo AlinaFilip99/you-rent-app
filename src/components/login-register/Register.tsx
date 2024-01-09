@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
 import { checkmarkOutline, closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { signUp } from '../../services/user';
+import { addUser, signUp } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
 import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
@@ -72,6 +72,8 @@ const Register = () => {
             let response = await signUp(email, password);
 
             if (response.user) {
+                let userProfile: IUser = { email: email, emailVerified: response.user.emailVerified };
+                await addUser(userProfile, response.user.uid);
                 await new Init().initUserProfile(response.user);
                 setNotification('Account created successfully!', 'success', () => {
                     appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
