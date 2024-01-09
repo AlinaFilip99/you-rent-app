@@ -39,6 +39,9 @@ export const setTabBarVisibility = () => {
         case '/estates':
             tabsVisible = true;
             break;
+        case '/user':
+            tabsVisible = true;
+            break;
 
         default:
             break;

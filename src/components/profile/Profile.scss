@@ -1,0 +1,43 @@
+.profile-page {
+    .score-options-row {
+        .stars {
+            margin: unset;
+        }
+        ion-button {
+            margin: unset;
+            min-height: 24px;
+            --padding-top: 0px;
+            --padding-bottom: 0px;
+            --padding-end: 0px;
+            --padding-start: 0px;
+            ion-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+    .profile-content {
+        margin: 20px 0px;
+        flex-direction: column;
+        gap: 10px;
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .name {
+            color: var(--ion-color-medium);
+            font-size: 16px;
+            line-height: 160%;
+        }
+        .social-media {
+            gap: 10px;
+        }
+        .profile-picture,
+        .name,
+        .social-media {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { IonButton, IonIcon, IonRow } from '@ionic/react';
 import { useMemo, useState } from 'react';
 import { add, carOutline, constructOutline, cubeOutline, flameOutline } from 'ionicons/icons';
 import { Marker } from 'pigeon-maps';
+import { useHistory } from 'react-router-dom';
 import './EstateDescription.scss';
 import OverflowText from '../base/OverflowText';
 import ShowMoreText from '../base/ShowMoreText';
@@ -28,6 +29,7 @@ const HeetingTypesValues: { [key: number]: string } = {
 };
 
 const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
+    const history = useHistory();
     const [userName, setUserName] = useState<string>('');
     const [userPicture, setUserPicture] = useState<string>('');
 
@@ -69,13 +71,26 @@ const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
         return details;
     }, [estate]);
 
+    const viewUserProfile = () => {
+        if (estate.userId) {
+            history.push('/user/' + estate.userId);
+        }
+    };
+
     return (
         <div className="estate-description-section">
             {userName && (
                 <IonRow className="estate-user-request">
-                    <ImageFallback className="user-picture" url={userPicture} fallbackUrl="./assets/img/user-noimage.png" />
+                    <ImageFallback
+                        className="user-picture"
+                        url={userPicture}
+                        fallbackUrl="./assets/img/user-noimage.png"
+                        onClick={viewUserProfile}
+                    />
                     <div>
-                        <div className="user-name">{userName}</div>
+                        <div className="user-name" onClick={viewUserProfile}>
+                            {userName}
+                        </div>
                         <div className="user-type">Owner</div>
                     </div>
                     {/* <IonButton className="request-button">

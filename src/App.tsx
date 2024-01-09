@@ -34,6 +34,7 @@ import LoginPage from './pages/LoginPage';
 import EstatesPage from './pages/EstatesPage';
 import RegisterPage from './pages/RegisterPage';
 import EstateViewPage from './pages/EstateViewPage';
+import ProfilePage from './pages/ProfilePage';
 
 setupIonicReact({ mode: 'ios' });
 
@@ -71,6 +72,7 @@ const App: React.FC = () => {
                             </Route>
                             <PrivateRoute path="/estates" component={EstatesPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/estate/:id" component={EstateViewPage} exact={true}></PrivateRoute>
+                            <PrivateRoute path="/user/:id?" component={ProfilePage} exact={true}></PrivateRoute>
                         </IonRouterOutlet>
 
                         <IonTabBar slot="bottom" mode="ios" id="app-tab-bar" style={{ display: 'none' }}>
@@ -84,7 +86,7 @@ const App: React.FC = () => {
                                 <IonLabel>Requests</IonLabel>
                             </IonTabButton> */}
 
-                            <IonTabButton tab="profile" href="/profile">
+                            <IonTabButton tab="profile" href="/user">
                                 <UserProfileIcon />
                                 <IonLabel>Profile</IonLabel>
                             </IonTabButton>
