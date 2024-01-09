@@ -10,6 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/zoom';
 // Import Swiper - END
 import './ImageSwiper.scss';
+import ImageFallback from './ImageFallback';
 import { isIOS, isMobile } from '../../utils/util';
 
 interface IImageSwiper {
@@ -74,7 +75,7 @@ const ImageSwiper: React.FC<IImageSwiper> = ({ urls = [], fullScreenMode }) => {
                 urls.length > 0 &&
                 urls.map((x, index) => (
                     <SwiperSlide key={index} onClick={() => openModal(index)} zoom={true}>
-                        <img src={x} />
+                        <ImageFallback url={x} />
                     </SwiperSlide>
                 ))}
         </Swiper>

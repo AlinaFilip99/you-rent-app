@@ -1,14 +1,16 @@
 import { IonButton, IonIcon, IonRow } from '@ionic/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { add, carOutline, constructOutline, cubeOutline, flameOutline } from 'ionicons/icons';
 import { Marker } from 'pigeon-maps';
 import './EstateDescription.scss';
 import OverflowText from '../base/OverflowText';
 import ShowMoreText from '../base/ShowMoreText';
 import GenericMap from '../base/GenericMap';
+import ImageFallback from '../base/ImageFallback';
 import { HeetingType } from '../../utils/enums';
 import IEstate from '../../interfaces/api/IEstate';
 import { SurfaceIcon } from '../../assets/svg-icons';
+import { getUserDataById } from '../../services/user';
 
 interface IEstateDetail {
     icon: React.ReactNode;
@@ -26,10 +28,22 @@ const HeetingTypesValues: { [key: number]: string } = {
 };
 
 const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
-    const { estateDetails, userPicture, userName } = useMemo(() => {
-        let details: IEstateDetail[] = [],
-            userPicture = './assets/img/user-noimage.png',
-            userName = 'John Doe';
+    const [userName, setUserName] = useState<string>('');
+    const [userPicture, setUserPicture] = useState<string>('');
+
+    const setUserData = async () => {
+        let user = await getUserDataById(estate.userId);
+
+        if (user?.displayName) {
+            setUserName(user.displayName);
+        }
+        if (user?.photoURL) {
+            setUserPicture(user.photoURL);
+        }
+    };
+
+    const estateDetails = useMemo(() => {
+        let details: IEstateDetail[] = [];
 
         if (estate?.habitableArea) {
             details.push({ icon: <SurfaceIcon />, value: estate.habitableArea + ' m2' });
@@ -49,14 +63,17 @@ const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
                 value: estate.hasPrivateParking ? 'Extra storage' : ''
             });
         }
-        return { estateDetails: details, userPicture, userName };
+        if (estate.userId) {
+            setUserData();
+        }
+        return details;
     }, [estate]);
 
     return (
         <div className="estate-description-section">
             {userName && (
                 <IonRow className="estate-user-request">
-                    <img className="user-picture" src={userPicture} alt="img" />
+                    <ImageFallback className="user-picture" url={userPicture} fallbackUrl="./assets/img/user-noimage.png" />
                     <div>
                         <div className="user-name">{userName}</div>
                         <div className="user-type">Owner</div>

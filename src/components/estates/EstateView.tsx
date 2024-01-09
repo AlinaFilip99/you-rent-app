@@ -12,6 +12,7 @@ import OverflowText from '../base/OverflowText';
 import StarRating from '../base/StarRating';
 import CommentsSection from '../base/CommentsSection';
 import ImageSwiper from '../base/ImageSwiper';
+import ImageFallback from '../base/ImageFallback';
 import IEstate from '../../interfaces/api/IEstate';
 import { getEstateById } from '../../services/estate';
 import userProfile from '../../services/userProfile';
@@ -27,7 +28,6 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [estate, setEstate] = useState<IEstate>();
     const [editEstate, setEditEstate] = useState<IEstate>();
-    const [hasPictureError, setHasPictureError] = useState<boolean>(false);
     const [selectedSegment, setSelectedSegment] = useState<string>('description');
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [viewPicturesVisible, setViewPicturesVisible] = useState<boolean>(false);
@@ -39,12 +39,12 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
         if (estate?.score) {
             value = (estate.score * 5) / 100;
         }
-        if (estate?.pictureUrls && estate.pictureUrls.length > 0 && !hasPictureError) {
+        if (estate?.pictureUrls && estate.pictureUrls.length > 0) {
             estatePicture = estate.pictureUrls[0];
         }
 
         return { scoreValue: value, estatePicture };
-    }, [estate, hasPictureError]);
+    }, [estate]);
 
     useEffect(() => {
         load();
@@ -90,12 +90,7 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
                 {estate ? (
                     <>
                         <div className="estate-image-overlay">
-                            <img
-                                className="estate-image"
-                                src={estatePicture}
-                                alt="img"
-                                onError={() => setHasPictureError(true)}
-                            />
+                            <ImageFallback className="estate-image" url={estatePicture} />
                             <div
                                 className="image-overlay"
                                 onClick={() => {

@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from './firebase/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { cleanData } from '../utils/util';
 
 export const signUp = async (email: string, password: string) => {
@@ -19,8 +19,16 @@ export const addUser = async (userData: IUser, userId: string) => {
     return response;
 };
 
-export const getUserData = async (userId: string) => {
-    // tbd
+export const getUserDataById = async (userId: string) => {
+    const estateRef = doc(db, 'users', userId);
+    const response = await getDoc(estateRef);
+
+    let responseData;
+    if (response.exists()) {
+        responseData = { id: response.id, ...response.data() };
+    }
+
+    return responseData as IUser | undefined;
 };
 
 export const sendResetPasswordEmail = async (email: string) => {

@@ -4,6 +4,7 @@ import { IonIcon, IonItem, IonRow } from '@ionic/react';
 
 import './EstateListItem.scss';
 import OverflowText from '../base/OverflowText';
+import ImageFallback from '../base/ImageFallback';
 import { BathroomIcon, BedroomIcon, SurfaceIcon } from '../../assets/svg-icons';
 import IEstate from '../../interfaces/api/IEstate';
 
@@ -13,25 +14,24 @@ interface IEstateListItem {
 }
 
 const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
-    const [hasPictureError, setHasPictureError] = useState<boolean>(false);
     const { scoreValue, estatePicture } = useMemo(() => {
         let value,
-            estatePicture = './assets/img/estate-fallback.png';
+            estatePicture = '';
 
         if (estate.score) {
             value = (estate.score * 5) / 100;
         }
-        if (estate.pictureUrls && estate.pictureUrls.length > 0 && !hasPictureError) {
+        if (estate.pictureUrls && estate.pictureUrls.length > 0) {
             estatePicture = estate.pictureUrls[0];
         }
 
         return { scoreValue: value, estatePicture };
-    }, [estate, hasPictureError]);
+    }, [estate]);
 
     return (
         <IonItem className="estate-list-item" onClick={() => onClick(estate.id)}>
             <IonRow className="estate-item">
-                <img className="estate-image" src={estatePicture} alt="img" onError={() => setHasPictureError(true)} />
+                <ImageFallback className="estate-image" url={estatePicture} />
                 <IonRow className="estate-data">
                     <IonRow className="estate-name-price ion-justify-content-between">
                         <div>{estate.name}</div>
