@@ -167,7 +167,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
     };
 
     const onDone = async () => {
-        if (!title || !price || !city || !country || !bedrooms || !bathrooms || !surface) {
+        if (!title || !price || !city || !country || !bedrooms || !bathrooms || !surface || isLoading) {
             setNotification('Error!', 'error');
             return;
         }

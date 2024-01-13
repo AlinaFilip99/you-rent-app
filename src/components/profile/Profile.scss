@@ -1,0 +1,59 @@
+.profile-page {
+    .score-options-row {
+        padding: 22px;
+        padding-bottom: 10px;
+        .stars {
+            margin: unset;
+        }
+        ion-button {
+            margin: unset;
+            min-height: 24px;
+            --padding-top: 0px;
+            --padding-bottom: 0px;
+            --padding-end: 0px;
+            --padding-start: 0px;
+            ion-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+    .profile-content {
+        margin: 20px 0px;
+        flex-direction: column;
+        gap: 10px;
+        height: -webkit-fill-available;
+        flex-wrap: nowrap;
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            min-height: 100px;
+            min-width: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .name {
+            color: var(--ion-color-medium);
+            font-size: 16px;
+            line-height: 160%;
+        }
+        .social-media {
+            gap: 10px;
+        }
+        .profile-picture,
+        .name,
+        .social-media {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .tab-content {
+            height: -webkit-fill-available;
+            .estate-list {
+                margin-top: 20px;
+            }
+            .page-info {
+                height: 100%;
+            }
+        }
+    }
+}

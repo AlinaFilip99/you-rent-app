@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
 import { checkmarkOutline, closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { signUp } from '../../services/user';
+import { addUser, signUp } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
 import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
@@ -12,6 +12,7 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [samePassword, setSamePassword] = useState(false);
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -63,8 +64,13 @@ const Register = () => {
         setEmail(value);
     };
 
+    const onNameInput = (ev: Event) => {
+        const value = (ev.target as HTMLIonInputElement).value as string;
+        setFullName(value);
+    };
+
     const onCreateAccount = async () => {
-        if (!email || !samePassword || !acceptPolicy) {
+        if (!email || !samePassword || !acceptPolicy || !fullName) {
             return;
         }
         setIsLoading(true);
@@ -72,6 +78,8 @@ const Register = () => {
             let response = await signUp(email, password);
 
             if (response.user) {
+                let userProfile: IUser = { email: email, emailVerified: response.user.emailVerified, displayName: fullName };
+                await addUser(userProfile, response.user.uid);
                 await new Init().initUserProfile(response.user);
                 setNotification('Account created successfully!', 'success', () => {
                     appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
@@ -90,6 +98,17 @@ const Register = () => {
                 Create an account
             </IonText>
             <IonRow className="custom-ion-row gap16">
+                <div className="input-item">
+                    <IonInput
+                        value={fullName}
+                        placeholder="Full name"
+                        class="custom-input-field"
+                        color="medium"
+                        type="text"
+                        autocomplete="off"
+                        onIonInput={onNameInput}
+                    />
+                </div>
                 <div className="input-item">
                     <IonInput
                         value={email}
