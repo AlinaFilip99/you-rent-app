@@ -1,5 +1,7 @@
 .profile-page {
     .score-options-row {
+        padding: 22px;
+        padding-bottom: 10px;
         .stars {
             margin: unset;
         }
@@ -20,9 +22,14 @@
         margin: 20px 0px;
         flex-direction: column;
         gap: 10px;
+        height: -webkit-fill-available;
+        flex-wrap: nowrap;
         .profile-picture {
             width: 100px;
             height: 100px;
+            min-height: 100px;
+            min-width: 100px;
+            object-fit: cover;
             border-radius: 50%;
         }
         .name {
@@ -38,6 +45,15 @@
         .social-media {
             margin-left: auto;
             margin-right: auto;
+        }
+        .tab-content {
+            height: -webkit-fill-available;
+            .estate-list {
+                margin-top: 20px;
+            }
+            .page-info {
+                height: 100%;
+            }
         }
     }
 }

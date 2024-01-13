@@ -11,7 +11,9 @@ import {
     updateDoc,
     arrayUnion,
     arrayRemove,
-    deleteField
+    deleteField,
+    query,
+    where
 } from 'firebase/firestore';
 
 const collectionData = collection(db, 'estates');
@@ -34,6 +36,17 @@ export const getEstateById = async (estateId: string) => {
     }
 
     return responseData as IEstate | undefined;
+};
+
+export const getEstatesByUserId = async (userId: string) => {
+    const q = query(collectionData, where('userId', '==', userId));
+
+    const response = await getDocs(q);
+    const responseData = response.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+    });
+
+    return responseData as IEstate[];
 };
 
 export const addEstate = async (estateData: IEstate) => {

@@ -33,6 +33,10 @@ export const formatISODateTime = (date: moment.Moment) => {
     return date.format('YYYY-MM-DDTHH:mm:ss');
 };
 
+export const formatDateTime = (date: moment.Moment) => {
+    return date.format('DD/MM/YYYY HH:mm');
+};
+
 export const setTabBarVisibility = () => {
     let tabsVisible = false;
     switch (window.location.pathname) {

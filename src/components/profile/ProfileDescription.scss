@@ -1,0 +1,19 @@
+.profile-description {
+    ion-row {
+        align-items: center;
+        margin-bottom: 5px;
+        svg {
+            margin-right: 10px;
+        }
+        color: var(--ion-color-medium);
+        font-size: 14px;
+        &.action-row {
+            color: var(--ion-color-secondary);
+        }
+    }
+    .description {
+        margin-top: 10px;
+        font-size: 14px;
+        color: var(--ion-color-medium);
+    }
+}

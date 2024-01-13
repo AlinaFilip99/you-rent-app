@@ -175,17 +175,13 @@ const EstateList = () => {
                     </IonToolbar>
                 }
             >
-                {estates && estates.length > 0 ? (
-                    <>
-                        <EstateItemList data={estates} onItemClick={onViewEstate} />
-                        <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
-                            <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
-                                <IonIcon icon={add}></IonIcon>
-                            </IonFabButton>
-                        </IonFab>
-                    </>
-                ) : (
-                    <PageInfo icon={<IonIcon icon={searchOutline} />} />
+                <EstateItemList data={estates} onItemClick={onViewEstate} />
+                {estates && estates.length > 0 && (
+                    <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
+                        <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
+                            <IonIcon icon={add}></IonIcon>
+                        </IonFabButton>
+                    </IonFab>
                 )}
             </PageLayout>
         </>
