@@ -14,8 +14,9 @@ import CommentsSection from '../base/CommentsSection';
 import ImageSwiper from '../base/ImageSwiper';
 import ImageFallback from '../base/ImageFallback';
 import IEstate from '../../interfaces/api/IEstate';
-import { getEstateById } from '../../services/estate';
+import { getEstateById, updateEstateScore } from '../../services/estate';
 import userProfile from '../../services/userProfile';
+import { addComment, getEstateComments } from '../../services/comment';
 import { BathroomIcon, BedroomIcon, OverviewIcon } from '../../assets/svg-icons';
 import { ToFullAddress, capitalize } from '../../utils/util';
 
@@ -31,13 +32,14 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
     const [selectedSegment, setSelectedSegment] = useState<string>('description');
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [viewPicturesVisible, setViewPicturesVisible] = useState<boolean>(false);
+    const [comments, setComments] = useState<IComment[]>([]);
 
     const { scoreValue, estatePicture } = useMemo(() => {
         let value = 0,
             estatePicture = './assets/img/estate-fallback.png';
 
         if (estate?.score) {
-            value = (estate.score * 5) / 100;
+            value = estate.score;
         }
         if (estate?.pictureUrls && estate.pictureUrls.length > 0) {
             estatePicture = estate.pictureUrls[0];
@@ -61,6 +63,10 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
         } else {
             history.goBack();
         }
+        let commentsResponse = await getEstateComments(estateId);
+        if (commentsResponse) {
+            setComments(commentsResponse);
+        }
         setIsLoading(false);
     };
 
@@ -75,6 +81,41 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
         if (refreshPage) {
             load();
         }
+    };
+
+    const updateScore = async (newComments: IComment[]) => {
+        let newScore = 0;
+        newComments.forEach((x) => {
+            if (x.score) {
+                newScore += x.score;
+            }
+        });
+
+        await updateEstateScore(newScore / newComments.length, estateId);
+
+        if (estate) {
+            let newEstate = { ...estate };
+            newEstate.score = newScore / newComments.length;
+            setEstate(newEstate);
+        }
+    };
+
+    const onComment = async (newComment: IComment) => {
+        newComment.estateId = estateId;
+        let response = await addComment(newComment);
+        if (response.id) {
+            let newComments = [...comments];
+            newComments.push({ ...newComment, id: response.id });
+            setComments(newComments);
+            updateScore(newComments);
+        }
+    };
+
+    const onDeleteComment = async (commentId: string) => {
+        let newComments = [...comments];
+        newComments = newComments.filter((x) => x.id !== commentId);
+        setComments(newComments);
+        updateScore(newComments);
     };
 
     return (
@@ -166,7 +207,16 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
                                 <IonLabel>Comments</IonLabel>
                             </IonSegmentButton>
                         </IonSegment>
-                        {selectedSegment === 'description' ? <EstateDescription estate={estate} /> : <CommentsSection />}
+                        {selectedSegment === 'description' ? (
+                            <EstateDescription estate={estate} />
+                        ) : (
+                            <CommentsSection
+                                comments={comments}
+                                onAddComment={onComment}
+                                ownerId={estate.userId}
+                                onDeleteComment={onDeleteComment}
+                            />
+                        )}
                     </>
                 ) : (
                     <PageInfo icon={<OverviewIcon color="var(--ion-color-light)" />} />

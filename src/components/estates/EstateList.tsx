@@ -57,7 +57,7 @@ const EstateList = () => {
 
     const setIncludeItemByAppliedFilters = (includeItem: boolean, estate: IEstate) => {
         if (appliedFilters) {
-            let score = estate.score ? (estate.score * 5) / 100 : 0;
+            let score = estate.score ? estate.score : 0;
             let {
                 minScore,
                 price,

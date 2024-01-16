@@ -158,7 +158,7 @@ export const ToFullAddress = (
     return address;
 };
 
-export const cleanData = (data: IEstate | IUser, replaceValue?: any) => {
+export const cleanData = (data: IEstate | IUser | IComment, replaceValue?: any) => {
     let cleanData: { [key: string]: number | string | boolean | undefined | string[] | GeoPoint } = { ...data };
     Object.keys(cleanData).forEach((key) => {
         if (!cleanData[key]) {

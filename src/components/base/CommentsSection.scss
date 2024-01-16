@@ -1,0 +1,40 @@
+.comments-section {
+    .add-comment-section {
+        .user-picture {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        margin-top: 15px;
+        flex-wrap: nowrap;
+        gap: 10px;
+        ion-textarea {
+            --color: var(--ion-color-medium);
+            border: 1px solid var(--ion-color-light);
+            border-radius: 8px;
+            --padding-start: 10px;
+            --padding-end: 10px;
+            --padding-top: 10px;
+            --padding-bottom: 10px;
+            --placeholder-color: var(--ion-color-light);
+            margin-bottom: 10px;
+        }
+        .add-comment-data {
+            width: 100%;
+        }
+        .stars {
+            margin: unset;
+            height: 20px;
+        }
+        ion-button {
+            min-height: 32px;
+            height: 32px;
+            margin: 0px;
+            margin-left: auto;
+            --border-radius: 5px;
+        }
+    }
+}

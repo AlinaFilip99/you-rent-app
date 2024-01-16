@@ -14,4 +14,5 @@ interface IUser extends IBaseObject {
     birthday?: string;
     relationshipStatusType?: number;
     gender?: number;
+    score?: number;
 }

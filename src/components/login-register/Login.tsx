@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
 import { closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { login, sendResetPasswordEmail } from '../../services/user';
+import { getUserDataById, login, sendResetPasswordEmail } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
 import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
@@ -44,7 +44,10 @@ const Login = () => {
             let response = await login(email, password);
 
             if (response.user) {
-                await new Init().initUserProfile(response.user);
+                let currentUserProfile = await getUserDataById(response.user.uid);
+                if (currentUserProfile) {
+                    await new Init().initUserProfile(currentUserProfile, await response.user.getIdToken());
+                }
                 setNotification('Logged in successfully!', 'success', () => {
                     appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
                     window.location.href = '/estates';

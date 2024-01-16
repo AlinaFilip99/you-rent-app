@@ -8,9 +8,14 @@ class Init {
         this._userProfile = ProfileData;
     }
 
-    async initUserProfile(user: User) {
-        this._userProfile.AccessToken = await user.getIdToken();
-        this._userProfile.UserId = user.uid;
+    async initUserProfile(user: IUser, accesToken: string) {
+        this._userProfile.AccessToken = accesToken;
+        if (user.id) {
+            this._userProfile.UserId = user.id;
+        }
+        if (user.photoURL) {
+            this._userProfile.PhotoUrl = user.photoURL;
+        }
     }
 
     static redirectToLogin() {
