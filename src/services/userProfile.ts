@@ -7,11 +7,18 @@ class ProfileData {
         }
     }
 
+    get PhotoUrl(): string {
+        return LocalStorage.read('PhotoUrl');
+    }
+    set PhotoUrl(value: string) {
+        LocalStorage.write('PhotoUrl', value);
+    }
+
     get UserId(): string {
         return LocalStorage.read('UserId');
     }
     set UserId(value: string) {
-        LocalStorage.write('UserId', value.toString());
+        LocalStorage.write('UserId', value);
     }
 
     get AccessToken(): string {

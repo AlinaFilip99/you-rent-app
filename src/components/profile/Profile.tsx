@@ -4,17 +4,19 @@ import { chevronBackOutline, ellipsisVertical, searchOutline, warningOutline } f
 import { useHistory } from 'react-router-dom';
 import './Profile.scss';
 import ProfileEdit from './ProfileEdit';
+import ProfileDescription from './ProfileDescription';
 import PageLayout from '../base/PageLayout';
 import StarRating from '../base/StarRating';
 import ImageFallback from '../base/ImageFallback';
 import PageInfo from '../base/PageInfo';
 import CommentsSection from '../base/CommentsSection';
 import EstateItemList from '../estates/EstateItemList';
-import { getUserDataById, logout } from '../../services/user';
+import { getUserDataById, logout, updateUserScore } from '../../services/user';
+import { getEstatesByUserId } from '../../services/estate';
+import { addComment, getProfileComments } from '../../services/comment';
+import userProfile from '../../services/userProfile';
 import { FacebookIcon, InstagramIcon, LinkedInIcon } from '../../assets/svg-icons';
 import IEstate from '../../interfaces/api/IEstate';
-import { getEstatesByUserId } from '../../services/estate';
-import ProfileDescription from './ProfileDescription';
 
 const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId, showBackButton }) => {
     const history = useHistory();
@@ -23,10 +25,11 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
     const [showEdit, setShowEdit] = useState(false);
     const [showProfileOptions, setShowProfileOptions] = useState(false);
     const [estates, setEstates] = useState<IEstate[]>();
-    const [comments, setComments] = useState<IEstate[]>();
+    const [comments, setComments] = useState<IComment[]>([]);
     const [selectedSegment, setSelectedSegment] = useState<string>('description');
 
     useEffect(() => {
+        setSelectedSegment('description');
         load();
     }, [userId]);
 
@@ -39,6 +42,10 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
         let estateList = await getEstatesByUserId(userId);
         if (estateList) {
             setEstates(estateList);
+        }
+        let commentsResponse = await getProfileComments(userId);
+        if (commentsResponse) {
+            setComments(commentsResponse);
         }
         setUserData(response);
     };
@@ -53,6 +60,9 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
             }
             if (userData.photoURL) {
                 pictureUrl = userData.photoURL;
+            }
+            if (userData.score) {
+                score = userData.score;
             }
         }
         setIsLoading(false);
@@ -86,6 +96,41 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
         if (url) {
             window.open(url, '_blank');
         }
+    };
+
+    const updateScore = async (newComments: IComment[]) => {
+        let newScore = 0;
+        newComments.forEach((x) => {
+            if (x.score) {
+                newScore += x.score;
+            }
+        });
+
+        await updateUserScore(newScore / newComments.length, userId);
+
+        if (userData) {
+            let newUserData = { ...userData };
+            newUserData.score = newScore / newComments.length;
+            setUserData(newUserData);
+        }
+    };
+
+    const onComment = async (newComment: IComment) => {
+        newComment.profileId = userId;
+        let response = await addComment(newComment);
+        if (response.id) {
+            let newComments = [...comments];
+            newComments.push({ ...newComment, id: response.id });
+            setComments(newComments);
+            updateScore(newComments);
+        }
+    };
+
+    const onDeleteComment = async (commentId: string) => {
+        let newComments = [...comments];
+        newComments = newComments.filter((x) => x.id !== commentId);
+        setComments(newComments);
+        updateScore(newComments);
     };
 
     return (
@@ -163,15 +208,12 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
                             {selectedSegment === 'description' && <ProfileDescription userData={userData} />}
                             {selectedSegment === 'posts' && <EstateItemList data={estates} onItemClick={onViewEstate} />}
                             {selectedSegment === 'comments' && (
-                                <>
-                                    {comments && comments.length > 0 ? (
-                                        <>
-                                            <CommentsSection />
-                                        </>
-                                    ) : (
-                                        <PageInfo icon={<IonIcon icon={searchOutline} />} />
-                                    )}
-                                </>
+                                <CommentsSection
+                                    comments={comments}
+                                    onAddComment={onComment}
+                                    ownerId={userData.id || ''}
+                                    onDeleteComment={onDeleteComment}
+                                />
                             )}
                         </div>
                     </IonRow>

@@ -19,7 +19,7 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
             estatePicture = '';
 
         if (estate.score) {
-            value = (estate.score * 5) / 100;
+            value = estate.score;
         }
         if (estate.pictureUrls && estate.pictureUrls.length > 0) {
             estatePicture = estate.pictureUrls[0];

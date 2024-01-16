@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
 import { checkmarkOutline, closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { addUser, signUp } from '../../services/user';
+import { addUser, getUserDataById, signUp } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
 import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
@@ -80,7 +80,10 @@ const Register = () => {
             if (response.user) {
                 let userProfile: IUser = { email: email, emailVerified: response.user.emailVerified, displayName: fullName };
                 await addUser(userProfile, response.user.uid);
-                await new Init().initUserProfile(response.user);
+                let currentUserProfile = await getUserDataById(response.user.uid);
+                if (currentUserProfile) {
+                    await new Init().initUserProfile(currentUserProfile, await response.user.getIdToken());
+                }
                 setNotification('Account created successfully!', 'success', () => {
                     appState?.setState({ ...appState.state, isAuthenticated: true, user: response.user });
                     window.location.href = '/estates';

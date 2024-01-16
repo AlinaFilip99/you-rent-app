@@ -62,6 +62,13 @@ export const updateEstate = async (estateData: IEstate, estateId: string) => {
     return response;
 };
 
+export const updateEstateScore = async (newScore: number, estateId: string) => {
+    const estateRef = doc(db, 'estates', estateId);
+
+    const response = await updateDoc(estateRef, { score: newScore });
+    return response;
+};
+
 export const updateEstatePictures = async (estateId: string, newValue?: string[]) => {
     const estateRef = doc(db, 'estates', estateId);
 

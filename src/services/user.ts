@@ -53,6 +53,13 @@ export const updateUser = async (userData: IUser, userId: string) => {
     return response;
 };
 
+export const updateUserScore = async (newScore: number, userId: string) => {
+    const userRef = doc(db, 'users', userId);
+
+    const response = await updateDoc(userRef, { score: newScore });
+    return response;
+};
+
 export const changePassword = async (newPassword: string) => {
     const user = auth.currentUser;
 
