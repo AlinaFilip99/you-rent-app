@@ -13,6 +13,9 @@ interface IModal {
     children: React.ReactNode;
     footerContent?: React.ReactNode;
     extraClassNames?: string;
+    initialBreakpoint?: number;
+    breakpoints?: number[];
+    onDismiss?: Function;
 }
 
 const Modal: React.FC<IModal> = ({
@@ -24,10 +27,19 @@ const Modal: React.FC<IModal> = ({
     endButtonLabel,
     children,
     footerContent,
-    extraClassNames
+    extraClassNames,
+    initialBreakpoint,
+    breakpoints,
+    onDismiss
 }) => {
     return (
-        <IonModal isOpen={isVisible} className={'generic-modal ' + extraClassNames}>
+        <IonModal
+            isOpen={isVisible}
+            className={'generic-modal ' + extraClassNames}
+            initialBreakpoint={initialBreakpoint}
+            breakpoints={breakpoints}
+            onIonModalDidDismiss={() => onDismiss && onDismiss()}
+        >
             <IonHeader>
                 <IonToolbar class="modal-toolbar">
                     {onStartButtonClick && (

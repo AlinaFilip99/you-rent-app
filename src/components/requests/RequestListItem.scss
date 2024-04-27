@@ -1,0 +1,60 @@
+.request-list-item {
+    --padding-start: 0px;
+    --inner-padding-end: 0px;
+    &:not(:last-child) {
+        margin-bottom: 30px;
+    }
+    .request-image {
+        width: 85px;
+        height: 85px;
+        min-width: 85px;
+        min-height: 85px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    ion-row {
+        flex-wrap: nowrap;
+    }
+    .request-item {
+        width: 100%;
+        .request-data {
+            width: calc(100% - 100px);
+            margin-left: 10px;
+            flex-direction: column;
+            justify-content: space-between;
+            .request-sender-estate {
+                color: var(--ion-color-medium);
+                font-size: 16px;
+                font-weight: 500;
+                .request-estate-name {
+                    color: var(--ion-color-secondary);
+                    font-size: 12px;
+                    text-decoration: underline;
+                }
+                .request-sender-name,
+                .request-estate-name {
+                    max-width: 49%;
+                }
+            }
+            .request-message {
+                font-size: 14px;
+                color: var(--ion-color-light);
+                &.sent-message {
+                    margin-bottom: auto;
+                    margin-top: 10px;
+                }
+            }
+            .request-buttons {
+                gap: 20px;
+                .accept-request-button,
+                .decline-request-button {
+                    margin: unset;
+                    font-weight: 400;
+                    font-size: 14px;
+                    --padding-top: 9px;
+                    --padding-bottom: 9px;
+                }
+            }
+        }
+    }
+}

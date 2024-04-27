@@ -1,0 +1,10 @@
+.requests-page {
+    ion-row.header-row {
+        padding: 16px 18px;
+        padding-bottom: 20px;
+        flex-wrap: nowrap;
+    }
+    ion-content.ion-padding.custom-padding {
+        --padding-top: 0px;
+    }
+}

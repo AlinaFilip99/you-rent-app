@@ -1,5 +1,7 @@
 import { GeoPoint } from 'firebase/firestore';
 import IEstate from '../interfaces/api/IEstate';
+import { getRequestsBySenderId } from '../services/request';
+import userProfile from '../services/userProfile';
 
 export const isMobile = (): boolean => {
     let userAgent = navigator.userAgent;
@@ -44,6 +46,9 @@ export const setTabBarVisibility = () => {
             tabsVisible = true;
             break;
         case '/user':
+            tabsVisible = true;
+            break;
+        case '/requests':
             tabsVisible = true;
             break;
 
@@ -158,7 +163,7 @@ export const ToFullAddress = (
     return address;
 };
 
-export const cleanData = (data: IEstate | IUser | IComment, replaceValue?: any) => {
+export const cleanData = (data: IEstate | IUser | IComment | IRequest, replaceValue?: any) => {
     let cleanData: { [key: string]: number | string | boolean | undefined | string[] | GeoPoint } = { ...data };
     Object.keys(cleanData).forEach((key) => {
         if (!cleanData[key]) {
@@ -170,4 +175,18 @@ export const cleanData = (data: IEstate | IUser | IComment, replaceValue?: any) 
         }
     });
     return cleanData;
+};
+
+export const getExistingRequest = async (senderId: string, receiverId: string) => {
+    let response,
+        sentRequests = await getRequestsBySenderId(userProfile.UserId);
+
+    if (sentRequests?.length > 0) {
+        let existingRequest = sentRequests.find((x) => x.senderId === senderId && x.receiverId === receiverId);
+        if (existingRequest) {
+            response = existingRequest;
+        }
+    }
+
+    return response;
 };
