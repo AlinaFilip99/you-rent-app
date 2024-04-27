@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { IonButton, IonItem, IonRow, useIonToast } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
@@ -15,6 +16,10 @@ const RequestListItem: React.FC<{ request: IRequest; onClick: Function; onReques
 }) => {
     const history = useHistory();
     const [present] = useIonToast();
+
+    const isSender = useMemo(() => {
+        return request?.senderId === userProfile.UserId;
+    }, [request]);
 
     const setNotification = (message: string, type?: string, callback?: Function) => {
         present({
@@ -89,15 +94,10 @@ const RequestListItem: React.FC<{ request: IRequest; onClick: Function; onReques
                             <OverflowText text={request.estateName}></OverflowText>
                         </div>
                     </IonRow>
-                    <div
-                        className={
-                            'request-message ' +
-                            (request.senderId === userProfile.UserId || !request.isPending ? 'sent-message' : '')
-                        }
-                    >
+                    <div className={'request-message ' + (isSender || !request.isPending ? 'sent-message' : '')}>
                         <OverflowText text={request.lastMessage}></OverflowText>
                     </div>
-                    {request.isPending && request.senderId !== userProfile.UserId && (
+                    {request.isPending && !isSender && (
                         <IonRow className="request-buttons">
                             <IonButton className="accept-request-button" onClick={onAcceptRequest}>
                                 Accept

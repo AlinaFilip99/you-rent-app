@@ -39,7 +39,7 @@
             .request-message {
                 font-size: 14px;
                 color: var(--ion-color-light);
-                .sent-message {
+                &.sent-message {
                     margin-bottom: auto;
                     margin-top: 10px;
                 }
