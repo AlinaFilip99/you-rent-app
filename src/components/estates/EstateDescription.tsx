@@ -1,6 +1,6 @@
-import { IonButton, IonIcon, IonRow, useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, IonRow } from '@ionic/react';
 import { useMemo, useState } from 'react';
-import { add, carOutline, closeOutline, constructOutline, cubeOutline, flameOutline } from 'ionicons/icons';
+import { add, carOutline, constructOutline, cubeOutline, flameOutline } from 'ionicons/icons';
 import { Marker } from 'pigeon-maps';
 import { useHistory } from 'react-router-dom';
 import './EstateDescription.scss';
@@ -15,7 +15,8 @@ import { SurfaceIcon } from '../../assets/svg-icons';
 import { getUserDataById } from '../../services/user';
 import userProfile from '../../services/userProfile';
 import { addRequest, updateRequest } from '../../services/request';
-import { capitalize, getExistingRequest } from '../../utils/util';
+import { getExistingRequest } from '../../utils/util';
+import useNotification from '../../hooks/useNotification';
 
 interface IEstateDetail {
     icon: React.ReactNode;
@@ -34,7 +35,7 @@ const HeetingTypesValues: { [key: number]: string } = {
 
 const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
     const history = useHistory();
-    const [present] = useIonToast();
+    const setNotification = useNotification();
     const [userName, setUserName] = useState<string>('');
     const [userPicture, setUserPicture] = useState<string>('');
     const [showSendRequest, setShowSendRequest] = useState<boolean>(false);
@@ -105,27 +106,6 @@ const EstateDescription: React.FC<{ estate: IEstate }> = ({ estate }) => {
 
     const onSendRequest = () => {
         setShowSendRequest(true);
-    };
-
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
     };
 
     const sendRequestData = async (data: IRequest) => {

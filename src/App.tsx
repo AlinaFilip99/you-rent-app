@@ -36,6 +36,7 @@ import RegisterPage from './pages/RegisterPage';
 import EstateViewPage from './pages/EstateViewPage';
 import ProfilePage from './pages/ProfilePage';
 import RequestsPage from './pages/RequestsPage';
+import ChatPage from './pages/ChatPage';
 
 setupIonicReact({ mode: 'ios' });
 
@@ -65,7 +66,7 @@ const App: React.FC = () => {
             <IonApp>
                 <IonReactRouter>
                     <IonTabs>
-                        <IonRouterOutlet>
+                        <IonRouterOutlet placeholder="">
                             <Route path="/login" component={LoginPage} exact={true} />
                             <Route path="/register" component={RegisterPage} exact={true} />
                             <Route path="/" exact={true}>
@@ -74,6 +75,7 @@ const App: React.FC = () => {
                             <PrivateRoute path="/estates" component={EstatesPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/requests" component={RequestsPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/estate/:id" component={EstateViewPage} exact={true}></PrivateRoute>
+                            <PrivateRoute path="/chat/:id" component={ChatPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/user/:id?" component={ProfilePage} exact={true}></PrivateRoute>
                         </IonRouterOutlet>
 

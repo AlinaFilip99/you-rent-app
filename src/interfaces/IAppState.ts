@@ -4,6 +4,8 @@ interface IAppState {
     isAuthenticated: boolean;
     user: User | null;
     refreshEvent: CustomEvent<RefresherEventDetail> | null;
+    sentRequests?: IRequest[];
+    receivedRequests?: IRequest[];
 }
 
 export default IAppState;

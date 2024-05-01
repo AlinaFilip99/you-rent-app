@@ -10,8 +10,7 @@ import {
     IonSelect,
     IonSelectOption,
     IonTextarea,
-    IonToggle,
-    useIonToast
+    IonToggle
 } from '@ionic/react';
 import { closeOutline, cloudUploadOutline, locationOutline } from 'ionicons/icons';
 import { GeoPoint } from 'firebase/firestore';
@@ -26,8 +25,8 @@ import { validateFiles } from '../../utils/fileUtils';
 import { deleteFile, getFileUrl, uploadFile } from '../../services/file';
 import IEstate from '../../interfaces/api/IEstate';
 import { addEstate, updateEstate } from '../../services/estate';
-import { capitalize } from '../../utils/util';
 import userProfile from '../../services/userProfile';
+import useNotification from '../../hooks/useNotification';
 
 interface IEstateAddEdit {
     isVisible: boolean;
@@ -37,7 +36,7 @@ interface IEstateAddEdit {
 
 const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate }) => {
     const validExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'heic'];
-    const [present] = useIonToast();
+    const setNotification = useNotification();
     const inputRef = useRef<HTMLInputElement>(null);
     const [showExtraAddressFields, setShowExtraAddressFields] = useState<boolean>(false);
     const [photos, setPhotos] = useState<File[]>();
@@ -63,6 +62,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
     const [storage, setStorage] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isActive, setIsActive] = useState<boolean>(false);
 
     useEffect(() => {
         if (estate) {
@@ -114,27 +114,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
         setHeetingType(estate?.heetingType);
         setParking(estate?.hasPrivateParking || false);
         setStorage(estate?.hasExtraStorage || false);
-    };
-
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
+        setIsActive(estate?.isActive || false);
     };
 
     const resetState = () => {
@@ -159,6 +139,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
         setHeetingType(undefined);
         setParking(false);
         setStorage(false);
+        setIsActive(false);
     };
 
     const onCancel = () => {
@@ -174,7 +155,7 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
         setIsLoading(true);
         let estateData: IEstate = {
             score: 0,
-            isActive: true,
+            isActive: isEdit ? isActive : true,
             userId: userProfile.UserId,
             name: title,
             price,
@@ -384,6 +365,17 @@ const EstateAddEdit: React.FC<IEstateAddEdit> = ({ isVisible, onClose, estate })
                                     );
                                 })}
                             </IonList>
+                        </IonItem>
+                    )}
+                    {isEdit && (
+                        <IonItem>
+                            <IonLabel>Active post</IonLabel>
+                            <IonToggle
+                                aria-label="active-post"
+                                mode="md"
+                                checked={isActive}
+                                onIonChange={() => setIsActive(!isActive)}
+                            ></IonToggle>
                         </IonItem>
                     )}
                 </IonList>

@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react';
-import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
-import { checkmarkOutline, closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { IonButton, IonCheckbox, IonIcon, IonInput, IonRow, IonText } from '@ionic/react';
+import { checkmarkOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { addUser, getUserDataById, signUp } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
-import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
+import useNotification from '../../hooks/useNotification';
 
 const Register = () => {
     const appState = useContext(AppContext);
-    const [present] = useIonToast();
+    const setNotification = useNotification();
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [samePassword, setSamePassword] = useState(false);
@@ -17,27 +17,6 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [acceptPolicy, setacceptPolicy] = useState(false);
-
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
-    };
 
     const onPasswordInput = (ev: Event) => {
         const value = (ev.target as HTMLIonInputElement).value as string;

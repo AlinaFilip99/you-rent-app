@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { IonLabel, IonList, IonRow, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/react';
 
 import './RequestList.scss';
@@ -8,9 +9,12 @@ import PageInfo from '../base/PageInfo';
 import { NotificationIcon } from '../../assets/svg-icons';
 import { getRequestsByReceiverId, getRequestsBySenderId } from '../../services/request';
 import userProfile from '../../services/userProfile';
+import AppContext from '../../contexts/AppContext';
 
 const RequestList = () => {
     const userId = userProfile.UserId;
+    const history = useHistory();
+    const appState = useContext(AppContext);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [requests, setRequests] = useState<IRequest[]>();
     const [selectedSegment, setSelectedSegment] = useState<string>('received');
@@ -18,6 +22,18 @@ const RequestList = () => {
     useEffect(() => {
         load();
     }, [selectedSegment]);
+
+    useEffect(() => {
+        if (selectedSegment === 'received') {
+            if (appState?.state.receivedRequests) {
+                setRequests(appState.state.receivedRequests);
+            }
+        } else {
+            if (appState?.state.sentRequests) {
+                setRequests(appState.state.sentRequests);
+            }
+        }
+    }, [appState?.state.sentRequests, appState?.state.receivedRequests]);
 
     const load = async () => {
         if (isLoading || !userId) {
@@ -28,9 +44,11 @@ const RequestList = () => {
         let response;
         if (selectedSegment === 'received') {
             response = await getRequestsByReceiverId(userId);
+            appState?.setState({ ...appState.state, receivedRequests: response });
             response = response.filter((x) => x.isPending || x.isAccepted);
         } else {
             response = await getRequestsBySenderId(userId);
+            appState?.setState({ ...appState.state, sentRequests: response });
         }
 
         if (response) {
@@ -44,8 +62,10 @@ const RequestList = () => {
         load();
     };
 
-    const onRequestClick = () => {
-        //tbd
+    const onRequestClick = (requestId?: string) => {
+        if (requestId) {
+            history.push('/chat/' + requestId);
+        }
     };
 
     return (
@@ -80,7 +100,7 @@ const RequestList = () => {
                                 <RequestListItem
                                     request={x}
                                     key={'requestId:' + x.id}
-                                    onClick={onRequestClick}
+                                    onClick={() => onRequestClick(x.id)}
                                     onRequestUpdate={onRefreshList}
                                 />
                             );

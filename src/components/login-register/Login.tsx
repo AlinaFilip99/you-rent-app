@@ -1,39 +1,18 @@
 import { useContext, useState } from 'react';
-import { IonButton, IonIcon, IonInput, IonRow, IonText, useIonToast } from '@ionic/react';
-import { closeOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { IonButton, IonIcon, IonInput, IonRow, IonText } from '@ionic/react';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { getUserDataById, login, sendResetPasswordEmail } from '../../services/user';
 import AppContext from '../../contexts/AppContext';
-import { capitalize } from '../../utils/util';
 import Init from '../../services/init';
+import useNotification from '../../hooks/useNotification';
 
 const Login = () => {
     const appState = useContext(AppContext);
-    const [present] = useIonToast();
+    const setNotification = useNotification();
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
-    };
 
     const onLogin = async () => {
         if (!email || !password) {

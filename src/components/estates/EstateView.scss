@@ -90,6 +90,12 @@
                 }
             }
         }
+        &.inactive {
+            .estate-image,
+            .image-overlay {
+                opacity: 0.7;
+            }
+        }
     }
     .estate-price-score {
         align-items: center;
