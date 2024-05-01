@@ -130,7 +130,7 @@ const EstateView: React.FC<IEstateView> = ({ estateId }) => {
             <PageLayout pageClassName="estate-view-page" isLoading={isLoading}>
                 {estate ? (
                     <>
-                        <div className="estate-image-overlay">
+                        <div className={'estate-image-overlay ' + (!estate.isActive ? 'inactive' : '')}>
                             <ImageFallback className="estate-image" url={estatePicture} />
                             <div
                                 className="image-overlay"

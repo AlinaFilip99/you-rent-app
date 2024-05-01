@@ -1,22 +1,24 @@
-import { IonContent, IonHeader, IonLoading, IonPage, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonFooter, IonHeader, IonLoading, IonPage, IonRefresher, IonRefresherContent } from '@ionic/react';
 import React, { useMemo } from 'react';
 
-interface ILoginRegisterPage {
+interface IPageLayout {
     pageClassName?: string;
     isLoading?: boolean;
     children: React.ReactNode;
     contentRef?: React.RefObject<HTMLIonContentElement>;
     onRefresh?: Function;
     headerContent?: React.ReactNode;
+    footerContent?: React.ReactNode;
 }
 
-const PageLayout: React.FC<ILoginRegisterPage> = ({
+const PageLayout: React.FC<IPageLayout> = ({
     isLoading,
     children,
     contentRef,
     pageClassName,
     onRefresh,
-    headerContent
+    headerContent,
+    footerContent
 }) => {
     const tabBar = document.getElementById('app-tab-bar');
 
@@ -50,6 +52,7 @@ const PageLayout: React.FC<ILoginRegisterPage> = ({
                 )}
                 {children}
             </IonContent>
+            {footerContent && <IonFooter>{footerContent}</IonFooter>}
         </IonPage>
     );
 };

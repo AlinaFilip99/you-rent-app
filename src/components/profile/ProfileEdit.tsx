@@ -14,17 +14,16 @@ import {
     IonPopover,
     IonSelect,
     IonSelectOption,
-    IonTextarea,
-    useIonToast
+    IonTextarea
 } from '@ionic/react';
 import './ProfileEdit.scss';
 import Modal from '../base/Modal';
-import { capitalize } from '../../utils/util';
 import { validateFiles } from '../../utils/fileUtils';
 import { FacebookIcon, InstagramIcon, LinkedInIcon } from '../../assets/svg-icons';
 import { GenderType, RelationshipType } from '../../utils/enums';
 import { deleteFile, getFileUrl, uploadFile } from '../../services/file';
 import { updateUser } from '../../services/user';
+import useNotification from '../../hooks/useNotification';
 
 interface IProfileEdit {
     isVisible: boolean;
@@ -34,7 +33,7 @@ interface IProfileEdit {
 
 const ProfileEdit: React.FC<IProfileEdit> = ({ isVisible, onClose, userData }) => {
     const validExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'heic'];
-    const [present] = useIonToast();
+    const setNotification = useNotification();
     const inputRef = useRef<HTMLInputElement>(null);
     const [photo, setPhoto] = useState<File>();
     const [pictureError, setPictureError] = useState<boolean>(false);
@@ -94,27 +93,6 @@ const ProfileEdit: React.FC<IProfileEdit> = ({ isVisible, onClose, userData }) =
         setBirthday(moment().toISOString(true));
         setRelationship(undefined);
         setGender(undefined);
-    };
-
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
     };
 
     const onCancel = () => {

@@ -19,3 +19,9 @@ export enum GenderType {
     Female = 1,
     NotSay = 2
 }
+
+export enum MessageStatus {
+    Sent = 1,
+    Seen = 2,
+    Pending = 0
+}

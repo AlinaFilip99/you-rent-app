@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { IonButton, IonItem, IonRow, useIonToast } from '@ionic/react';
-import { closeOutline } from 'ionicons/icons';
+import { IonButton, IonItem, IonRow } from '@ionic/react';
 import './RequestListItem.scss';
 import ImageFallback from '../base/ImageFallback';
 import OverflowText from '../base/OverflowText';
 import userProfile from '../../services/userProfile';
 import { updateRequest } from '../../services/request';
-import { capitalize } from '../../utils/util';
+import useNotification from '../../hooks/useNotification';
+import { getUserDataById } from '../../services/user';
 
 const RequestListItem: React.FC<{ request: IRequest; onClick: Function; onRequestUpdate: Function }> = ({
     request,
@@ -15,32 +15,23 @@ const RequestListItem: React.FC<{ request: IRequest; onClick: Function; onReques
     onRequestUpdate
 }) => {
     const history = useHistory();
-    const [present] = useIonToast();
+    const setNotification = useNotification();
+    const [otherUserData, setOtherUserData] = useState<IUser>();
 
     const isSender = useMemo(() => {
         return request?.senderId === userProfile.UserId;
     }, [request]);
 
-    const setNotification = (message: string, type?: string, callback?: Function) => {
-        present({
-            message: capitalize(message),
-            duration: type === 'error' ? undefined : 1500,
-            position: 'top',
-            buttons:
-                type === 'error'
-                    ? [
-                          {
-                              icon: closeOutline,
-                              role: 'cancel'
-                          }
-                      ]
-                    : undefined,
-            color: type === 'error' ? 'danger' : 'success',
-            onDidDismiss: () => {
-                callback && callback();
-            }
-        });
-    };
+    useMemo(() => {
+        const setUserData = async (userId: string) => {
+            let response = await getUserDataById(userId);
+            setOtherUserData(response);
+        };
+        if (request) {
+            let otherUserId = request.receiverId === userProfile.UserId ? request.senderId : request.receiverId;
+            setUserData(otherUserId);
+        }
+    }, [request]);
 
     const updateRequestData = async (requestData: IRequest, requestId: string) => {
         try {
@@ -82,13 +73,13 @@ const RequestListItem: React.FC<{ request: IRequest; onClick: Function; onReques
             <IonRow className="request-item">
                 <ImageFallback
                     className="request-image"
-                    url={request.senderPhoto || ''}
+                    url={otherUserData?.photoURL || ''}
                     fallbackUrl="./assets/img/user-noimage.png"
                 />
                 <IonRow className="request-data">
                     <IonRow className="request-sender-estate ion-justify-content-between">
                         <div className="request-sender-name">
-                            <OverflowText text={request.senderName}></OverflowText>
+                            <OverflowText text={otherUserData?.displayName || ''}></OverflowText>
                         </div>
                         <div className="request-estate-name" onClick={onEstateClick}>
                             <OverflowText text={request.estateName}></OverflowText>

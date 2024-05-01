@@ -1,0 +1,65 @@
+.chat-page {
+    ion-toolbar {
+        margin: 5px 0;
+        .user-picture {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            object-fit: cover;
+        }
+        .user-name,
+        .estate-name {
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        .user-name {
+            color: var(--ion-color-medium);
+            font-size: 16px;
+        }
+        .estate-name {
+            margin-top: 3px;
+            color: var(--ion-color-secondary);
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        ion-button {
+            min-height: 24px;
+            --padding-top: 0px;
+            --padding-bottom: 0px;
+            --padding-end: 0px;
+            --padding-start: 0px;
+            margin: 0 10px;
+            ion-icon {
+                width: 24px;
+                height: 24px;
+            }
+            &.chat-options {
+                margin-left: auto;
+            }
+        }
+    }
+    ion-content {
+        --ion-background-color: #f8f8f8;
+        &.custom-padding {
+            --padding-start: 17px;
+            --padding-end: 17px;
+            --padding-top: 17px;
+            --padding-bottom: 17px;
+        }
+    }
+    ion-row.chat-footer {
+        background-color: #fff;
+        margin: 0px -17px;
+    }
+    .new-message-input {
+        margin-left: 17px;
+        max-width: calc(100% - 78px);
+    }
+    .send-button {
+        ion-spinner {
+            height: 23px;
+            width: 23px;
+        }
+    }
+}

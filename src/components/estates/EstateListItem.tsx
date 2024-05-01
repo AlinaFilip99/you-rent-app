@@ -29,7 +29,7 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
     }, [estate]);
 
     return (
-        <IonItem className="estate-list-item" onClick={() => onClick(estate.id)}>
+        <IonItem className={'estate-list-item ' + (!estate.isActive ? 'inactive' : '')} onClick={() => onClick(estate.id)}>
             <IonRow className="estate-item">
                 <ImageFallback className="estate-image" url={estatePicture} />
                 <IonRow className="estate-data">

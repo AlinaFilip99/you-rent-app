@@ -37,6 +37,7 @@ const EstateList = () => {
         setIsLoading(true);
         let response = await getEstates();
         if (response) {
+            response = response.filter((x) => x.isActive);
             setEstates(response);
             setInitialEstateList(response);
         }
