@@ -1,20 +1,7 @@
 import IEstate from '../interfaces/api/IEstate';
 import { cleanData } from '../utils/util';
 import { db } from './firebase/firebaseConfig';
-import {
-    getDocs,
-    collection,
-    addDoc,
-    GeoPoint,
-    getDoc,
-    doc,
-    updateDoc,
-    arrayUnion,
-    arrayRemove,
-    deleteField,
-    query,
-    where
-} from 'firebase/firestore';
+import { getDocs, collection, addDoc, getDoc, doc, updateDoc, arrayUnion, deleteField, query, where } from 'firebase/firestore';
 
 const collectionData = collection(db, 'estates');
 

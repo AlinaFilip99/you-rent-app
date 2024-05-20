@@ -1,20 +1,23 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonModal, IonRow, IonSegment, IonSegmentButton } from '@ionic/react';
 import { useEffect, useMemo, useState } from 'react';
-import { chevronBackOutline, ellipsisVertical, searchOutline, warningOutline } from 'ionicons/icons';
+import { chevronBackOutline, ellipsisVertical, warningOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+
 import './Profile.scss';
 import ProfileEdit from './ProfileEdit';
 import ProfileDescription from './ProfileDescription';
+import ProfileCriteriaList from './ProfileCriteriaList';
+
 import PageLayout from '../base/PageLayout';
 import StarRating from '../base/StarRating';
 import ImageFallback from '../base/ImageFallback';
 import PageInfo from '../base/PageInfo';
 import CommentsSection from '../base/CommentsSection';
 import EstateItemList from '../estates/EstateItemList';
-import { getUserDataById, logout, updateUserScore } from '../../services/user';
+
+import { getUserCriterias, getUserDataById, logout, updateUserScore } from '../../services/user';
 import { getEstatesByUserId } from '../../services/estate';
 import { addComment, getProfileComments } from '../../services/comment';
-import userProfile from '../../services/userProfile';
 import { FacebookIcon, InstagramIcon, LinkedInIcon } from '../../assets/svg-icons';
 import IEstate from '../../interfaces/api/IEstate';
 
@@ -195,13 +198,16 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
                             className="custom-segment"
                         >
                             <IonSegmentButton value="description">
-                                <IonLabel>Description</IonLabel>
+                                <IonLabel>Info</IonLabel>
                             </IonSegmentButton>
                             <IonSegmentButton value="posts">
                                 <IonLabel>Posts</IonLabel>
                             </IonSegmentButton>
                             <IonSegmentButton value="comments">
                                 <IonLabel>Comments</IonLabel>
+                            </IonSegmentButton>
+                            <IonSegmentButton value="criterias">
+                                <IonLabel>Criterias</IonLabel>
                             </IonSegmentButton>
                         </IonSegment>
                         <div className="tab-content">
@@ -215,6 +221,7 @@ const Profile: React.FC<{ userId: string; showBackButton: boolean }> = ({ userId
                                     onDeleteComment={onDeleteComment}
                                 />
                             )}
+                            {selectedSegment === 'criterias' && <ProfileCriteriaList userId={userId} />}
                         </div>
                     </IonRow>
                 ) : (
