@@ -14,9 +14,10 @@ interface IEstateListItem {
 }
 
 const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
-    const { scoreValue, estatePicture } = useMemo(() => {
+    const { scoreValue, estatePicture, matchingScore } = useMemo(() => {
         let value,
-            estatePicture = '';
+            estatePicture = '',
+            matchingScore = '';
 
         if (estate.score) {
             value = estate.score;
@@ -24,8 +25,15 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
         if (estate.pictureUrls && estate.pictureUrls.length > 0) {
             estatePicture = estate.pictureUrls[0];
         }
+        if (estate.matchingScore) {
+            if (Number.isInteger(estate.matchingScore)) {
+                matchingScore = estate.matchingScore + '%';
+            } else {
+                matchingScore = estate.matchingScore.toFixed(1) + '%';
+            }
+        }
 
-        return { scoreValue: value, estatePicture };
+        return { scoreValue: value, estatePicture, matchingScore };
     }, [estate]);
 
     return (
@@ -34,7 +42,10 @@ const EstateListItem: React.FC<IEstateListItem> = ({ estate, onClick }) => {
                 <ImageFallback className="estate-image" url={estatePicture} />
                 <IonRow className="estate-data">
                     <IonRow className="estate-name-price ion-justify-content-between">
-                        <div>{estate.name}</div>
+                        <span>
+                            {estate.name}
+                            {matchingScore && <span className="matching-score">{matchingScore}</span>}
+                        </span>
                         <div className="estate-price">{estate.price + ' €'}</div>
                     </IonRow>
                     {(estate.bedrooms || estate.bathrooms) && (

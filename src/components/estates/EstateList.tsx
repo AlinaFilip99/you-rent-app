@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IonButton, IonFab, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar } from '@ionic/react';
-import { add, optionsOutline, searchOutline } from 'ionicons/icons';
+import { add, chevronBackOutline, optionsOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core/components';
 import { useHistory } from 'react-router-dom';
 
@@ -10,10 +10,11 @@ import EstateFilters from './EstateFilters';
 import EstateAddEdit from './EstateAddEdit';
 import PageLayout from '../base/PageLayout';
 import { getEstates } from '../../services/estate';
-import PageInfo from '../base/PageInfo';
 import IEstate from '../../interfaces/api/IEstate';
+import { getUserCriteriaById } from '../../services/user';
+import userProfile from '../../services/userProfile';
 
-const EstateList = () => {
+const EstateList: React.FC<{ searchCriteriaId?: string }> = ({ searchCriteriaId }) => {
     let history = useHistory();
     const [estates, setEstates] = useState<IEstate[]>();
     const [initialEstateList, setInitialEstateList] = useState<IEstate[]>();
@@ -21,6 +22,7 @@ const EstateList = () => {
     const [appliedFilters, setAppliedFilters] = useState<IEstateFilterValues>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showEstateAddEdit, setShowEstateAddEdit] = useState<boolean>(false);
+    const [isForMatching, setIsForMatching] = useState<boolean>(false);
 
     useEffect(() => {
         load();
@@ -30,17 +32,114 @@ const EstateList = () => {
         filterEstates();
     }, [searchQuery, appliedFilters]);
 
+    const getEstateMatchingScore = (estate: IEstate, criteria: ISearchCriteria) => {
+        let nrOfCriterias = Object.keys(criteria).length - 2,
+            nrOfTrueConditions = 0,
+            {
+                priceMax,
+                priceMin,
+                country,
+                city,
+                bedrooms,
+                bathrooms,
+                habitableArea,
+                zip,
+                heetingType,
+                constructionYear,
+                hasPrivateParking,
+                hasExtraStorage
+            } = criteria;
+
+        if (estate.price >= priceMin && estate.price <= priceMax) {
+            nrOfTrueConditions++;
+        }
+        if (estate.country === country) {
+            nrOfTrueConditions++;
+        }
+        if (estate.city === city) {
+            nrOfTrueConditions++;
+        }
+        if (estate.bedrooms >= bedrooms) {
+            nrOfTrueConditions++;
+        }
+        if (bathrooms && estate.bathrooms >= bathrooms) {
+            nrOfTrueConditions++;
+        }
+        if (habitableArea && estate.habitableArea >= habitableArea) {
+            nrOfTrueConditions++;
+        }
+        if (zip && estate.zip === zip) {
+            nrOfTrueConditions++;
+        }
+        if (heetingType && estate.heetingType === heetingType) {
+            nrOfTrueConditions++;
+        }
+        if (constructionYear && estate.constructionYear && estate.constructionYear >= constructionYear) {
+            nrOfTrueConditions++;
+        }
+        if (hasPrivateParking && estate.hasPrivateParking) {
+            nrOfTrueConditions++;
+        }
+        if (hasExtraStorage && estate.hasExtraStorage) {
+            nrOfTrueConditions++;
+        }
+
+        return (nrOfTrueConditions * 100) / nrOfCriterias;
+    };
+
+    const getMatchingList = (response: IEstate[], searchCriteria: ISearchCriteria) => {
+        let estateList: IEstate[] = [];
+
+        response.forEach((estate) => {
+            let matchingScore = getEstateMatchingScore(estate, searchCriteria);
+            if (matchingScore) {
+                estate.matchingScore = matchingScore;
+                estateList.push(estate);
+            }
+        });
+
+        return estateList;
+    };
+
+    const sortByMatchingScore = (list: IEstate[]) => {
+        return list.sort((x, y) => {
+            if (x.matchingScore && y.matchingScore) {
+                if (x.matchingScore > y.matchingScore) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 0;
+            }
+        });
+    };
+
     const load = async () => {
         if (isLoading) {
             return;
         }
         setIsLoading(true);
-        let response = await getEstates();
+
+        let response = await getEstates(),
+            searchCriteria: ISearchCriteria | undefined;
+
+        if (searchCriteriaId) {
+            searchCriteria = await getUserCriteriaById(userProfile.UserId, searchCriteriaId);
+        }
+
         if (response) {
             response = response.filter((x) => x.isActive);
+
+            if (searchCriteria) {
+                setIsForMatching(true);
+                response = sortByMatchingScore(getMatchingList(response, searchCriteria));
+            }
+
             setEstates(response);
             setInitialEstateList(response);
         }
+
         setIsLoading(false);
     };
 
@@ -114,6 +213,10 @@ const EstateList = () => {
             return includeItem;
         });
 
+        if (isForMatching) {
+            newValue = sortByMatchingScore(newValue);
+        }
+
         setEstates(newValue);
     };
 
@@ -162,6 +265,11 @@ const EstateList = () => {
                 headerContent={
                     <IonToolbar>
                         <IonRow className="header-row">
+                            {isForMatching && (
+                                <IonButton fill="clear" className="back-button" onClick={() => history.goBack()}>
+                                    <IonIcon slot="icon-only" icon={chevronBackOutline}></IonIcon>
+                                </IonButton>
+                            )}
                             <IonSearchbar
                                 value={searchQuery}
                                 onIonInput={onSearchChange}
@@ -177,7 +285,7 @@ const EstateList = () => {
                 }
             >
                 <EstateItemList data={estates} onItemClick={onViewEstate} />
-                {estates && estates.length > 0 && (
+                {estates && estates.length > 0 && !isForMatching && (
                     <IonFab slot="fixed" vertical="bottom" horizontal="end" aria-label="add-estate">
                         <IonFabButton size="small" onClick={() => setShowEstateAddEdit(true)}>
                             <IonIcon icon={add}></IonIcon>

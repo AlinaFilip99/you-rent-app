@@ -112,3 +112,15 @@ export const deleteSearchCriteria = async (userId: string, criteriaId: string) =
 
     return response;
 };
+
+export const getUserCriteriaById = async (userId: string, criteriaId: string) => {
+    const criteriaRef = doc(db, 'users', userId, 'criterias', criteriaId);
+    const response = await getDoc(criteriaRef);
+
+    let responseData;
+    if (response.exists()) {
+        responseData = { id: response.id, ...response.data() };
+    }
+
+    return responseData as ISearchCriteria | undefined;
+};

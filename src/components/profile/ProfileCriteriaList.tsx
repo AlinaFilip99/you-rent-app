@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonRow } from '@ionic/react';
 import { add, homeOutline, pencil, trashOutline } from 'ionicons/icons';
 
@@ -15,6 +16,7 @@ interface IProfileCriteriaList {
 
 const ProfileCriteriaList: React.FC<IProfileCriteriaList> = ({ userId }) => {
     const setNotification = useNotification();
+    const history = useHistory();
     const [searchCriterias, setSearchCriterias] = useState<ISearchCriteria[]>([]);
     const [showAddEditCriteria, setShowAddEditCriteria] = useState<boolean>(false);
     const [selectedCriteria, setSelectedCriteria] = useState<ISearchCriteria>();
@@ -70,7 +72,7 @@ const ProfileCriteriaList: React.FC<IProfileCriteriaList> = ({ userId }) => {
     };
 
     const onMatchCriteria = (criteriaId?: string) => {
-        //tbd: show estate list with criteria applied
+        history.push('/estates/' + criteriaId);
     };
 
     const onCloseAddEditModal = (refreshList?: boolean) => {

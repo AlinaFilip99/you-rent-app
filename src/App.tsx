@@ -72,7 +72,7 @@ const App: React.FC = () => {
                             <Route path="/" exact={true}>
                                 <Redirect to="/estates" />
                             </Route>
-                            <PrivateRoute path="/estates" component={EstatesPage} exact={true}></PrivateRoute>
+                            <PrivateRoute path="/estates/:searchCriteriaId?" component={EstatesPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/requests" component={RequestsPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/estate/:id" component={EstateViewPage} exact={true}></PrivateRoute>
                             <PrivateRoute path="/chat/:id" component={ChatPage} exact={true}></PrivateRoute>
