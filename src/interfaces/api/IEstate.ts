@@ -23,4 +23,5 @@ export default interface IEstate extends IBaseObject {
     hasExtraStorage?: boolean;
     pictureUrls?: string[];
     coordinates?: GeoPoint;
+    matchingScore?: number;
 }

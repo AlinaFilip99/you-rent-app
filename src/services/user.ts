@@ -6,7 +6,7 @@ import {
     updatePassword
 } from 'firebase/auth';
 import { auth, db } from './firebase/firebaseConfig';
-import { deleteField, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, deleteField, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { cleanData } from '../utils/util';
 
 export const signUp = async (email: string, password: string) => {
@@ -46,6 +46,15 @@ export const getUserDataById = async (userId: string) => {
     return responseData as IUser | undefined;
 };
 
+export const getUserCriterias = async (userId: string) => {
+    const response = await getDocs(collection(db, 'users', userId, 'criterias'));
+    const responseData = response.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+    });
+
+    return responseData as ISearchCriteria[];
+};
+
 export const updateUser = async (userData: IUser, userId: string) => {
     const userRef = doc(db, 'users', userId);
 
@@ -82,4 +91,36 @@ export const sendResetPasswordEmail = async (email: string) => {
     } catch (error) {
         return false;
     }
+};
+
+export const addSearchCriteria = async (userId: string, searchCriteriaData: ISearchCriteria) => {
+    const response = await addDoc(collection(db, 'users', userId, 'criterias'), cleanData(searchCriteriaData));
+    return response;
+};
+
+export const updateSearchCriteria = async (searchCriteriaData: ISearchCriteria, userId: string, criteriaId: string) => {
+    const criteriaRef = doc(db, 'users', userId, 'criterias', criteriaId);
+
+    const response = await updateDoc(criteriaRef, cleanData({ ...searchCriteriaData }, deleteField()));
+    return response;
+};
+
+export const deleteSearchCriteria = async (userId: string, criteriaId: string) => {
+    const criteriaRef = doc(db, 'users', userId, 'criterias', criteriaId);
+
+    const response = await deleteDoc(criteriaRef);
+
+    return response;
+};
+
+export const getUserCriteriaById = async (userId: string, criteriaId: string) => {
+    const criteriaRef = doc(db, 'users', userId, 'criterias', criteriaId);
+    const response = await getDoc(criteriaRef);
+
+    let responseData;
+    if (response.exists()) {
+        responseData = { id: response.id, ...response.data() };
+    }
+
+    return responseData as ISearchCriteria | undefined;
 };

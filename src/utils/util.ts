@@ -1,4 +1,5 @@
 import { GeoPoint } from 'firebase/firestore';
+import { HeetingType } from './enums';
 import IEstate from '../interfaces/api/IEstate';
 import { getRequestsBySenderId } from '../services/request';
 import userProfile from '../services/userProfile';
@@ -163,7 +164,10 @@ export const ToFullAddress = (
     return address;
 };
 
-export const cleanData = (data: IEstate | IUser | IComment | IRequest | IRequestMessage, replaceValue?: any) => {
+export const cleanData = (
+    data: IEstate | IUser | IComment | IRequest | IRequestMessage | ISearchCriteria,
+    replaceValue?: any
+) => {
     let cleanData: { [key: string]: number | string | boolean | undefined | string[] | GeoPoint } = { ...data };
     Object.keys(cleanData).forEach((key) => {
         if (!cleanData[key]) {
@@ -189,4 +193,66 @@ export const getExistingRequest = async (senderId: string, receiverId: string) =
     }
 
     return response;
+};
+
+export const getSearchCriteriaUserFriendlyDescription = (searchCriterias?: ISearchCriteria[]) => {
+    if (!searchCriterias) {
+        return [];
+    }
+
+    const HeetingTypesValues: { [key: number]: string } = {
+        [HeetingType.UnderfloorHeating]: 'Underfloor heating',
+        [HeetingType.Radiators]: 'Radiators',
+        [HeetingType.GasFurnace]: 'Gas furnace',
+        [HeetingType.HeatPump]: 'Heat pump',
+        [HeetingType.WallHeaters]: 'Wall heaters',
+        [HeetingType.BaseboardHeaters]: 'Baseboard heaters',
+        [HeetingType.Furnace]: 'Furnace'
+    };
+
+    let formattedCriterias = [];
+
+    for (let criteria of searchCriterias) {
+        let parts = [];
+        parts.push(`wants to <strong>rent</strong> a property in ${criteria.city} ${criteria.country}`);
+
+        let price = `with price between <strong>${criteria.priceMin + ' €'}</strong> and <strong>${
+            criteria.priceMax + ' €'
+        }</strong>`;
+        if (parts) {
+            parts.push(price);
+        }
+        if (criteria.habitableArea) {
+            parts.push(`with area from <strong>${criteria.habitableArea} m2</strong>`);
+        }
+        let features = [];
+        if (criteria.bedrooms) {
+            features.push(`${criteria.bedrooms} rooms`);
+        }
+        if (criteria.bathrooms) {
+            features.push(`${criteria.bathrooms} bathrooms`);
+        }
+        if (criteria.hasPrivateParking) {
+            features.push('private parking');
+        }
+        if (criteria.hasExtraStorage) {
+            features.push('extra storage');
+        }
+        if (features.length > 0) {
+            parts.push(`with ${features.join(', ')}`);
+        }
+        if (criteria.heetingType) {
+            parts.push(`with heeting through ${HeetingTypesValues[criteria.heetingType].toLowerCase()}`);
+        }
+        if (criteria.constructionYear) {
+            parts.push(`built after ${criteria.constructionYear}`);
+        }
+        if (criteria.zip) {
+            parts.push(`in zip code <strong>${criteria.zip}</strong>`);
+        }
+
+        formattedCriterias.push(parts.join(' '));
+    }
+
+    return formattedCriterias;
 };

@@ -1,0 +1,23 @@
+.user-criteria-list {
+    .add-button {
+        min-height: 32px;
+        height: 32px;
+        margin: 0px;
+        margin-bottom: 10px;
+        --border-radius: 5px;
+    }
+    .criteria-list {
+        ion-item {
+            --padding-start: 0px;
+            --padding-right: 0px;
+            --inner-padding-end: 0px;
+            ion-label {
+                color: var(--ion-color-medium);
+            }
+            .criteria-actions {
+                margin: 5px 0;
+                margin-left: auto;
+            }
+        }
+    }
+}
