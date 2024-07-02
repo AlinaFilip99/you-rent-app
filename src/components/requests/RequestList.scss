@@ -7,4 +7,15 @@
     ion-content.ion-padding.custom-padding {
         --padding-top: 0px;
     }
+    @media screen and (min-width: 600px) {
+        ion-row.header-row {
+            padding: calc(50% - 400px);
+            padding-bottom: 20px;
+            padding-top: unset;
+        }
+        .request-list {
+            max-width: 800px;
+            margin: auto;
+        }
+    }
 }

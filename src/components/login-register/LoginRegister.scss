@@ -2,6 +2,11 @@
     ion-content.custom-padding {
         --padding-top: 60px;
         --padding-bottom: 60px;
+
+        @media screen and (min-width: 600px) {
+            --padding-start: calc(50vw - 200px);
+            --padding-end: calc(50vw - 200px);
+        }
     }
     ion-row {
         width: -webkit-fill-available;

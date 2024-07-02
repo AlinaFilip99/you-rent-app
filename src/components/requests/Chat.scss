@@ -62,4 +62,18 @@
             width: 23px;
         }
     }
+    @media screen and (min-width: 600px) {
+        ion-toolbar ion-row {
+            max-width: 800px;
+            margin: auto;
+        }
+        ion-content.custom-padding {
+            --padding-start: calc(50vw - 400px);
+            --padding-end: calc(50vw - 400px);
+        }
+        ion-footer ion-row {
+            max-width: 800px;
+            margin: auto;
+        }
+    }
 }
