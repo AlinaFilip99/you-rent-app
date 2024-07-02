@@ -42,4 +42,31 @@
         padding-top: 0px;
         padding-bottom: 20px;
     }
+
+    @media screen and (min-width: 600px) {
+        ion-row.header-row {
+            padding-left: unset;
+            max-width: 800px;
+            margin: auto;
+            ion-searchbar {
+                max-width: 400px;
+                margin-right: auto;
+            }
+        }
+        .estate-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            .estate-list-item {
+                width: calc(50% - 20px);
+            }
+        }
+        ion-content.custom-padding {
+            --padding-start: calc(50vw - 400px);
+            --padding-end: calc(50vw - 400px);
+        }
+        ion-fab {
+            right: calc(50vw - 400px + var(--ion-safe-area-right));
+        }
+    }
 }

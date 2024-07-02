@@ -56,4 +56,11 @@
             }
         }
     }
+    @media screen and (min-width: 600px) {
+        .profile-content,
+        .score-options-row {
+            max-width: 800px;
+            margin: auto;
+        }
+    }
 }

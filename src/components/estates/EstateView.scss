@@ -105,4 +105,12 @@
             font-weight: 700;
         }
     }
+    @media screen and (min-width: 600px) {
+        .estate-image-overlay,
+        .estate-price-score,
+        ion-segment.custom-segment {
+            max-width: 800px;
+            margin: auto;
+        }
+    }
 }

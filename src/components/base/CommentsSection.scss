@@ -37,4 +37,8 @@
             --border-radius: 5px;
         }
     }
+    @media screen and (min-width: 600px) {
+        max-width: 800px;
+        margin: auto;
+    }
 }
